@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, 
@@ -18,7 +18,10 @@ import {
   CheckCircle2,
   Lock,
   ChevronRight,
-  MessageSquare
+  MessageSquare,
+  AlertTriangle,
+  Lightbulb,
+  Clock
 } from 'lucide-react';
 
 // Mock Server Action representing lead email dispatch
@@ -26,6 +29,46 @@ async function sendLeadEmail(formData: { name: string; businessName: string; wha
   await new Promise((resolve) => setTimeout(resolve, 1500));
   console.log('Lead submitted successfully to S&M Network Company:', formData);
   return { success: true };
+}
+
+// Text Roll Animation Button Component
+function TextRollButton({ 
+  children, 
+  href, 
+  onClick,
+  type = 'button',
+  className = '' 
+}: { 
+  children: string; 
+  href?: string; 
+  onClick?: (e: React.MouseEvent) => void;
+  type?: 'button' | 'submit';
+  className?: string;
+}) {
+  const content = (
+    <span className="relative block overflow-hidden h-5">
+      <motion.span 
+        className="flex flex-col transition-transform duration-300 ease-out group-hover:-translate-y-5"
+      >
+        <span className="h-5 flex items-center justify-center">{children}</span>
+        <span className="h-5 flex items-center justify-center text-emerald-100 font-extrabold">{children}</span>
+      </motion.span>
+    </span>
+  );
+
+  if (href) {
+    return (
+      <a href={href} onClick={onClick} className={`group ${className}`}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <button type={type} onClick={onClick} className={`group ${className}`}>
+      {content}
+    </button>
+  );
 }
 
 export default function Page() {
@@ -36,6 +79,32 @@ export default function Page() {
     whatsapp: ''
   });
   const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  // Santiago Time clock state
+  const [santiagoTime, setSantiagoTime] = useState<string>('--:--');
+
+  useEffect(() => {
+    const updateTime = () => {
+      try {
+        const options: Intl.DateTimeFormatOptions = {
+          timeZone: 'America/Santiago',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        };
+        setSantiagoTime(new Intl.DateTimeFormat('es-CL', options).format(new Date()));
+      } catch {
+        // Fallback in case of timezone formatting issues
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        setSantiagoTime(`${hh}:${mm}`);
+      }
+    };
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Restaurant Menu Interactivity State (Dona Flor Gourmet)
   const [menuItems, setMenuItems] = useState([
@@ -80,48 +149,56 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] selection:bg-emerald-100 selection:text-emerald-950 overflow-x-hidden antialiased font-sans p-4 md:p-6 lg:p-10">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] selection:bg-emerald-100 selection:text-emerald-950 overflow-x-hidden antialiased font-sans p-4 md:p-6 lg:p-10 pt-24">
       
       {/* Background Ambient Glows */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-100/30 rounded-full blur-3xl -z-10 pointer-events-none" />
       <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-cyan-100/20 rounded-full blur-3xl -z-10 pointer-events-none" />
 
-      {/* Main Structural Frame */}
-      <div className="max-w-7xl mx-auto border border-slate-200/80 rounded-[32px] bg-white/70 backdrop-blur-xl shadow-xl shadow-slate-100/50 p-4 md:p-8 lg:p-10 space-y-12 relative overflow-hidden">
-        
-        {/* Decorative Grid Gridline effect */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:6rem_6rem] opacity-[0.15] pointer-events-none" />
+      {/* Pill Navigation Bar */}
+      <nav className="fixed top-4 left-4 right-4 max-w-7xl mx-auto bg-white/80 backdrop-blur-md border border-slate-200/80 rounded-full shadow-lg px-4 md:px-8 py-3.5 flex items-center justify-between z-50 transition-all duration-300">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-[#0F172A] flex items-center justify-center text-white font-extrabold shadow-sm border border-slate-800 shrink-0">
+            <span className="text-[11px] text-transparent bg-clip-text bg-gradient-to-tr from-emerald-400 to-[#06B6D4]">S&M</span>
+          </div>
+          <div className="hidden sm:block">
+            <span className="font-black text-sm tracking-tight text-[#0F172A]">
+              S&M Network
+            </span>
+          </div>
+        </div>
 
-        {/* Navigation Header */}
-        <header className="flex items-center justify-between border-b border-slate-100 pb-6 relative z-20">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#0F172A] flex items-center justify-center text-white font-extrabold shadow-md border border-slate-800">
-              <span className="text-transparent bg-clip-text bg-gradient-to-tr from-emerald-400 to-[#06B6D4]">S&M</span>
-            </div>
-            <div>
-              <span className="font-black text-lg tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-                S&M Network
-              </span>
-              <span className="block text-[8px] text-[#10B981] tracking-widest font-extrabold uppercase -mt-1">Company</span>
-            </div>
+        {/* Center: Nav links and Clock */}
+        <div className="flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6 text-slate-500 font-bold text-xs uppercase tracking-wider">
+            <a href="#servicios" className="hover:text-[#0F172A] transition-colors">Servicios</a>
+            <a href="#proceso" className="hover:text-[#0F172A] transition-colors">Proceso</a>
+            <a href="#nosotros" className="hover:text-[#0F172A] transition-colors">Nosotros</a>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 bg-slate-50 border border-slate-200/50 px-6 py-2 rounded-full shadow-inner">
-            <a href="#servicios" className="text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-[#0F172A] transition-colors">Servicios</a>
-            <a href="#proceso" className="text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-[#0F172A] transition-colors">Proceso</a>
-            <a href="#nosotros" className="text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-[#0F172A] transition-colors">Nosotros</a>
-          </nav>
+          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/50 px-3 py-1.5 rounded-full text-[10px] font-extrabold text-slate-600 shadow-inner">
+            <Clock className="w-3.5 h-3.5 text-[#10B981]" />
+            <span>{santiagoTime} en Santiago, CL</span>
+          </div>
+        </div>
 
-          <a 
-            href="#contacto" 
-            className="inline-flex items-center justify-center px-6 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider text-white bg-[#10B981] hover:bg-emerald-600 active:scale-[0.98] transition-all shadow-md shadow-emerald-500/10 border border-emerald-500/20"
-          >
-            Contacto
-          </a>
-        </header>
+        {/* Right: CTA button */}
+        <TextRollButton
+          href="#contacto"
+          className="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white bg-[#10B981] hover:bg-emerald-600 active:scale-[0.98] transition-all shadow-md shadow-emerald-500/10 border border-emerald-500/20"
+        >
+          Contacto Directo
+        </TextRollButton>
+      </nav>
 
-        {/* Hero Section: Asymmetric 2-column Bento card */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
+      {/* Main Structural Frame */}
+      <div className="max-w-7xl mx-auto border border-slate-200/80 rounded-[32px] bg-white/70 backdrop-blur-xl shadow-xl shadow-slate-100/50 p-4 md:p-8 lg:p-10 space-y-16 relative overflow-hidden">
+        
+        {/* Decorative Grid Gridline effect */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:6rem_6rem] opacity-[0.12] pointer-events-none" />
+
+        {/* SECTION 1: HERO & INTERACTIVE DEMO */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10 pt-4">
           
           {/* Left Hero Box */}
           <motion.div 
@@ -131,7 +208,7 @@ export default function Page() {
             className="lg:col-span-7 bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-8 lg:p-12 flex flex-col justify-between shadow-sm relative overflow-hidden group"
           >
             {/* Fine grid pattern overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30 pointer-events-none" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20 pointer-events-none" />
 
             <div className="space-y-6 relative z-10">
               <div className="flex flex-wrap gap-2">
@@ -152,20 +229,17 @@ export default function Page() {
               </h1>
 
               <p className="text-sm md:text-base text-slate-500 leading-relaxed font-medium max-w-xl">
-                Páginas web, catálogos y menús digitales diseñados exclusivamente a la medida de tu presupuesto. Sin mensualidades sorpresas, sin enredos técnicos. Código optimizado que sí convierte.
+                Diseñamos y desarrollamos plataformas a medida para restaurantes, distribuidoras y comercios en Santiago. Sin tarifas ocultas, con un único pago y soporte personalizado.
               </p>
             </div>
 
             <div className="pt-8 relative z-10 flex flex-col sm:flex-row gap-4 items-center">
-              <motion.a
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <TextRollButton
                 href="#contacto"
                 className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-white bg-[#10B981] hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20 group"
               >
                 Agendar Asesoría Gratuita
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </motion.a>
+              </TextRollButton>
               <a 
                 href="#servicios" 
                 className="text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 transition-colors py-2"
@@ -183,17 +257,17 @@ export default function Page() {
             className="lg:col-span-5 bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-6 lg:p-8 flex flex-col justify-center items-center shadow-sm relative overflow-hidden group"
           >
             {/* Tech grid dots overlay */}
-            <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] bg-[size:1.5rem_1.5rem] opacity-40 pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] bg-[size:1.5rem_1.5rem] opacity-30 pointer-events-none" />
 
             {/* Premium Mobile Phone Frame */}
-            <div className="w-full max-w-[320px] bg-slate-950 rounded-[40px] border-4 border-slate-900 shadow-2xl overflow-hidden relative ring-8 ring-slate-100/50">
+            <div className="w-full max-w-[300px] bg-slate-950 rounded-[40px] border-4 border-slate-900 shadow-2xl overflow-hidden relative ring-8 ring-slate-100/50">
               
-              {/* Phone Dynamic Island / Camera cutout */}
+              {/* Phone Dynamic Island */}
               <div className="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-5 bg-black rounded-full z-30 flex items-center justify-center">
                 <span className="w-2.5 h-2.5 rounded-full bg-slate-900 block" />
               </div>
 
-              {/* Mockup Status Bar */}
+              {/* Status Bar */}
               <div className="bg-slate-900 pt-8 pb-2 text-center text-[9px] text-slate-400 font-semibold tracking-wider flex justify-between px-6 items-center">
                 <span>12:45 PM</span>
                 <div className="flex items-center gap-1.5">
@@ -208,37 +282,37 @@ export default function Page() {
                   <span className="text-[8px] uppercase font-extrabold tracking-widest bg-emerald-500/20 text-[#10B981] px-2 py-0.5 rounded border border-emerald-500/10">
                     Demo Interactiva
                   </span>
-                  <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
+                  <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
                 </div>
-                <h3 className="text-sm font-black mt-2 flex items-center gap-1">
+                <h3 className="text-sm font-black mt-2">
                   Dona Flor Gourmet <span className="text-xs">🇨🇱</span>
                 </h3>
                 <p className="text-[10px] text-slate-400">Santiago Centro • Pedidos al WhatsApp</p>
               </div>
 
               {/* Items List */}
-              <div className="p-3.5 space-y-2.5 max-h-[220px] overflow-y-auto bg-slate-900/95 scrollbar-thin scrollbar-thumb-slate-800">
+              <div className="p-3 space-y-2 max-h-[200px] overflow-y-auto bg-slate-900/95 scrollbar-thin scrollbar-thumb-slate-800">
                 {menuItems.map((item) => (
                   <div key={item.id} className="flex justify-between items-center p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/40">
                     <div className="space-y-0.5 flex-1 pr-2">
-                      <h4 className="font-bold text-xs text-white">{item.name}</h4>
-                      <span className="text-[10px] font-extrabold text-slate-400 block">
+                      <h4 className="font-bold text-xs text-white leading-tight">{item.name}</h4>
+                      <span className="text-[10px] font-extrabold text-[#10B981] block mt-0.5">
                         ${item.price.toLocaleString('es-CL')} CLP
                       </span>
                     </div>
 
                     {/* Counter Buttons */}
-                    <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-lg p-1 shrink-0">
+                    <div className="flex items-center gap-1 bg-slate-950 border border-slate-850 rounded-lg p-1 shrink-0">
                       <button 
                         onClick={() => handleDecrement(item.id)}
-                        className="w-4 h-4 rounded bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center font-bold text-[10px] border border-slate-700/60"
+                        className="w-4 h-4 rounded bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center font-bold text-[9px] border border-slate-700/60"
                       >
                         -
                       </button>
-                      <span className="w-2.5 text-center text-[10px] font-bold text-white">{item.count}</span>
+                      <span className="w-2 text-center text-[9px] font-bold text-white">{item.count}</span>
                       <button 
                         onClick={() => handleIncrement(item.id)}
-                        className="w-4 h-4 rounded bg-[#10B981] hover:bg-emerald-600 text-white flex items-center justify-center font-bold text-[10px]"
+                        className="w-4 h-4 rounded bg-[#10B981] hover:bg-emerald-600 text-white flex items-center justify-center font-bold text-[9px]"
                       >
                         +
                       </button>
@@ -257,12 +331,12 @@ export default function Page() {
                   <button 
                     onClick={() => {
                       if (calculateTotal() > 0) {
-                        alert('¡Pedido Enviado! Tu cliente pulsa este botón y te llega el pedido estructurado directamente a tu WhatsApp.');
+                        alert('¡Pedido Simulado! El pedido estructurado con el total exacto llegará directamente a tu chat de WhatsApp.');
                       } else {
                         alert('Por favor incrementa la cantidad de algún plato.');
                       }
                     }}
-                    className="px-3.5 py-2 rounded-lg text-[9px] font-extrabold text-slate-950 bg-[#10B981] hover:bg-emerald-400 transition-colors shadow-sm uppercase tracking-wider"
+                    className="px-3 py-2 rounded-lg text-[9px] font-extrabold text-slate-950 bg-[#10B981] hover:bg-emerald-400 transition-colors shadow-sm uppercase tracking-wider"
                   >
                     Enviar a WhatsApp
                   </button>
@@ -272,7 +346,48 @@ export default function Page() {
           </motion.div>
         </section>
 
-        {/* Bento Grid Services */}
+        {/* SECTION 2: EL PROBLEMA & LA SOLUCIÓN */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-100">
+          {/* El Problema */}
+          <div className="bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(239,68,68,0.02),transparent_90%)] pointer-events-none" />
+            <div className="space-y-6">
+              <div className="w-10 h-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center border border-red-100">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-black text-[#0F172A]">El Problema de las PYMEs</h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  Las agencias tradicionales en Chile cobran costos de mantenimiento excesivos o exigen contratos mensuales amarrados. Por otro lado, los creadores de sitios genéricos cargan páginas lentas y difíciles de configurar para clientes que solo desean vender rápido.
+                </p>
+              </div>
+            </div>
+            <div className="mt-8 pt-4 border-t border-slate-100 flex items-center gap-2 text-[10px] font-extrabold uppercase text-slate-400 tracking-wider">
+              <span>Sitios lentos • Comisiones altas • Enredos técnicos</span>
+            </div>
+          </div>
+
+          {/* La Solución */}
+          <div className="bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between relative overflow-hidden group hover:border-[#10B981]/45 transition-all duration-300">
+            <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(16,185,129,0.02),transparent_90%)] pointer-events-none" />
+            <div className="space-y-6">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#10B981] flex items-center justify-center border border-emerald-100">
+                <Lightbulb className="w-5 h-5" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-black text-[#0F172A]">La Solución de S&M</h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  Desarrollamos páginas web estáticas en Next.js ultrarrápidas con un único pago inicial y cero mensualidades. Catálogos digitales autogestionables que redireccionan pedidos formateados directamente a tu WhatsApp, agilizando tus ventas diarias.
+                </p>
+              </div>
+            </div>
+            <div className="mt-8 pt-4 border-t border-slate-100 flex items-center gap-2 text-[10px] font-extrabold uppercase text-[#10B981] tracking-wider">
+              <span>Cero mensualidad • Autogestionable • Pedidos al WhatsApp</span>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 3: SERVICIOS (Bento Grid) */}
         <section id="servicios" className="space-y-8 pt-6 border-t border-slate-100">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest text-[#06B6D4] bg-cyan-50 border border-cyan-100">
@@ -284,10 +399,10 @@ export default function Page() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            {/* Box 1 (Large Height) */}
+            {/* Box 1 */}
             <motion.div 
               whileHover={{ y: -6 }}
-              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[380px] relative overflow-hidden group hover:border-[#10B981]/50 transition-all duration-300"
+              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[360px] relative overflow-hidden group hover:border-[#10B981]/50 transition-all duration-300"
             >
               <div className="space-y-6">
                 <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#10B981] flex items-center justify-center border border-emerald-100 group-hover:scale-105 transition-transform duration-300">
@@ -306,10 +421,10 @@ export default function Page() {
               </div>
             </motion.div>
 
-            {/* Box 2 (Medium Height) */}
+            {/* Box 2 */}
             <motion.div 
               whileHover={{ y: -6 }}
-              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[350px] relative overflow-hidden group hover:border-[#06B6D4]/50 transition-all duration-300"
+              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[360px] relative overflow-hidden group hover:border-[#06B6D4]/50 transition-all duration-300"
             >
               <div className="space-y-6">
                 <div className="w-12 h-12 rounded-xl bg-cyan-50 text-[#06B6D4] flex items-center justify-center border border-cyan-100 group-hover:scale-105 transition-transform duration-300">
@@ -328,10 +443,10 @@ export default function Page() {
               </div>
             </motion.div>
 
-            {/* Box 3 (Medium Height) */}
+            {/* Box 3 */}
             <motion.div 
               whileHover={{ y: -6 }}
-              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[350px] relative overflow-hidden group hover:border-slate-800/30 transition-all duration-300"
+              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[360px] relative overflow-hidden group hover:border-slate-800/30 transition-all duration-300"
             >
               <div className="space-y-6">
                 <div className="w-12 h-12 rounded-xl bg-slate-50 text-[#0F172A] flex items-center justify-center border border-slate-200 group-hover:scale-105 transition-transform duration-300">
@@ -353,7 +468,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Framed Workflow Pipeline */}
+        {/* SECTION 4: CÓMO TRABAJAMOS (Pipeline Workflow) */}
         <section id="proceso" className="space-y-8 border-t border-slate-200/80 pt-10">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest text-[#10B981] bg-emerald-50 border border-emerald-100">
@@ -410,7 +525,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* About Us (The Team Bento) */}
+        {/* SECTION 5: QUIÉNES SOMOS (The Team Bento) */}
         <section id="nosotros" className="space-y-8 border-t border-slate-200/80 pt-10">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest text-[#10B981] bg-emerald-50 border border-emerald-100">
@@ -436,7 +551,7 @@ export default function Page() {
                   <p className="text-[10px] font-extrabold text-[#10B981] uppercase tracking-wider">Liderazgo Comercial & Gestión</p>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                  Relación empática con cada cliente, presupuestos realistas y comunicación transparente. Velamos por maximizar la rentabilidad de tu inversión.
+                  Asesor de clientes empático, encargado de la transparencia en la presupuestación y de escuchar en detalle la historia comercial de tu negocio.
                 </p>
               </div>
             </div>
@@ -455,7 +570,7 @@ export default function Page() {
                   <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Desarrollo Fullstack & UI/UX</p>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                  Transforma ideas comerciales en plataformas rápidas, seguras y de código limpio. Diseña pensando en la fluidez móvil de tus usuarios.
+                  Especialista en código a medida, ejecución flexible y transformación de ideas de negocios locales en robustas aplicaciones y menús web.
                 </p>
               </div>
             </div>
@@ -463,7 +578,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Contact Section: Dark Navy framed Bento card */}
+        {/* SECTION 6: CONTACTO & CALL TO ACTION */}
         <section id="contacto" className="max-w-3xl mx-auto">
           <motion.div 
             layout
@@ -513,7 +628,7 @@ export default function Page() {
                       placeholder="Juan Pérez"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-600"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-650"
                     />
                   </div>
 
@@ -528,7 +643,7 @@ export default function Page() {
                       placeholder="Ej. Dona Flor Gourmet, Distribuidora El Bosque..."
                       value={formData.businessName}
                       onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-600"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-650"
                     />
                   </div>
 
@@ -543,7 +658,7 @@ export default function Page() {
                       placeholder="Ej. +56 9 1234 5678"
                       value={formData.whatsapp}
                       onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-600"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-650"
                     />
                   </div>
 
@@ -553,21 +668,12 @@ export default function Page() {
                     </p>
                   )}
 
-                  <motion.button
-                    whileTap={{ scale: 0.98 }}
+                  <TextRollButton
                     type="submit"
-                    disabled={formStatus === 'loading'}
                     className="w-full inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-xs font-extrabold uppercase tracking-wider text-white bg-[#10B981] hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md shadow-emerald-500/10 border border-emerald-500/20"
                   >
-                    {formStatus === 'loading' ? (
-                      <span className="inline-flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Procesando...
-                      </span>
-                    ) : (
-                      'Enviar Mensaje'
-                    )}
-                  </motion.button>
+                    {formStatus === 'loading' ? 'Procesando...' : 'Enviar Mensaje'}
+                  </TextRollButton>
                 </motion.form>
               )}
             </AnimatePresence>
