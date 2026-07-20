@@ -47,12 +47,12 @@ function TextRollButton({
 }) {
   const content = (
     <span className="relative block overflow-hidden h-5">
-      <motion.span 
-        className="flex flex-col transition-transform duration-300 ease-out group-hover:-translate-y-5"
+      <span 
+        className="flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-5"
       >
         <span className="h-5 flex items-center justify-center">{children}</span>
         <span className="h-5 flex items-center justify-center text-emerald-100 font-extrabold">{children}</span>
-      </motion.span>
+      </span>
     </span>
   );
 
@@ -94,7 +94,6 @@ export default function Page() {
         };
         setSantiagoTime(new Intl.DateTimeFormat('es-CL', options).format(new Date()));
       } catch {
-        // Fallback in case of timezone formatting issues
         const now = new Date();
         const hh = String(now.getHours()).padStart(2, '0');
         const mm = String(now.getMinutes()).padStart(2, '0');
@@ -149,14 +148,38 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] selection:bg-emerald-100 selection:text-emerald-950 overflow-x-hidden antialiased font-sans p-4 md:p-6 lg:p-10 pt-24">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] selection:bg-emerald-100 selection:text-emerald-950 overflow-x-hidden antialiased font-sans p-4 md:p-6 lg:p-10 pt-24 relative">
       
-      {/* Background Ambient Glows */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-100/30 rounded-full blur-3xl -z-10 pointer-events-none" />
-      <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-cyan-100/20 rounded-full blur-3xl -z-10 pointer-events-none" />
+      {/* 1. Dynamic Background & Shader Blobs */}
+      <motion.div 
+        animate={{
+          x: [0, 80, -40, 0],
+          y: [0, -60, 40, 0],
+          scale: [1, 1.15, 0.9, 1]
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute top-10 left-1/4 w-[450px] h-[450px] bg-[#10B981] opacity-20 rounded-full blur-[100px] -z-10 pointer-events-none" 
+      />
+      <motion.div 
+        animate={{
+          x: [0, -90, 60, 0],
+          y: [0, 50, -70, 0],
+          scale: [1, 0.9, 1.1, 1]
+        }}
+        transition={{
+          duration: 24,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-[#06B6D4] opacity-20 rounded-full blur-[110px] -z-10 pointer-events-none" 
+      />
 
       {/* Pill Navigation Bar */}
-      <nav className="fixed top-4 left-4 right-4 max-w-7xl mx-auto bg-white/80 backdrop-blur-md border border-slate-200/80 rounded-full shadow-lg px-4 md:px-8 py-3.5 flex items-center justify-between z-50 transition-all duration-300">
+      <nav className="fixed top-4 left-4 right-4 max-w-7xl mx-auto bg-white/85 backdrop-blur-lg border border-slate-200/80 rounded-full shadow-lg px-4 md:px-8 py-3.5 flex items-center justify-between z-50 transition-all duration-300">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-[#0F172A] flex items-center justify-center text-white font-extrabold shadow-sm border border-slate-800 shrink-0">
             <span className="text-[11px] text-transparent bg-clip-text bg-gradient-to-tr from-emerald-400 to-[#06B6D4]">S&M</span>
@@ -168,21 +191,21 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Center: Nav links and Clock */}
+        {/* Center Nav & Time */}
         <div className="flex items-center gap-6">
-          <div className="hidden md:flex items-center gap-6 text-slate-500 font-bold text-xs uppercase tracking-wider">
+          <div className="hidden md:flex items-center gap-6 text-slate-500 font-extrabold text-xs uppercase tracking-wider">
             <a href="#servicios" className="hover:text-[#0F172A] transition-colors">Servicios</a>
             <a href="#proceso" className="hover:text-[#0F172A] transition-colors">Proceso</a>
             <a href="#nosotros" className="hover:text-[#0F172A] transition-colors">Nosotros</a>
           </div>
 
-          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/50 px-3 py-1.5 rounded-full text-[10px] font-extrabold text-slate-600 shadow-inner">
+          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/50 px-3.5 py-1.5 rounded-full text-[10px] font-extrabold text-slate-600 shadow-inner">
             <Clock className="w-3.5 h-3.5 text-[#10B981]" />
             <span>{santiagoTime} en Santiago, CL</span>
           </div>
         </div>
 
-        {/* Right: CTA button */}
+        {/* Right CTA */}
         <TextRollButton
           href="#contacto"
           className="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white bg-[#10B981] hover:bg-emerald-600 active:scale-[0.98] transition-all shadow-md shadow-emerald-500/10 border border-emerald-500/20"
@@ -192,10 +215,10 @@ export default function Page() {
       </nav>
 
       {/* Main Structural Frame */}
-      <div className="max-w-7xl mx-auto border border-slate-200/80 rounded-[32px] bg-white/70 backdrop-blur-xl shadow-xl shadow-slate-100/50 p-4 md:p-8 lg:p-10 space-y-16 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto border border-slate-200/80 rounded-[32px] bg-white/70 backdrop-blur-xl shadow-xl p-4 md:p-8 lg:p-10 space-y-16 relative overflow-hidden">
         
         {/* Decorative Grid Gridline effect */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:6rem_6rem] opacity-[0.12] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:6rem_6rem] opacity-[0.14] pointer-events-none" />
 
         {/* SECTION 1: HERO & INTERACTIVE DEMO */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10 pt-4">
@@ -205,7 +228,8 @@ export default function Page() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="lg:col-span-7 bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-8 lg:p-12 flex flex-col justify-between shadow-sm relative overflow-hidden group"
+            whileHover={{ y: -8, scale: 1.01 }}
+            className="lg:col-span-7 bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-8 lg:p-12 flex flex-col justify-between shadow-sm relative overflow-hidden group hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
           >
             {/* Fine grid pattern overlay */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20 pointer-events-none" />
@@ -224,8 +248,8 @@ export default function Page() {
                 </span>
               </div>
 
-              <h1 className="text-3xl md:text-5xl lg:text-[46px] font-black text-[#0F172A] leading-[1.1] tracking-tight">
-                Impulsamos el crecimiento digital de tu PYME con <span className="text-[#10B981] bg-emerald-50/80 px-2 py-0.5 rounded-xl border border-emerald-100">empatía y transparencia</span>
+              <h1 className="text-3xl md:text-5xl lg:text-[46px] font-extrabold text-[#0F172A] tracking-tight leading-[1.1]">
+                Impulsamos el crecimiento digital de tu PYME con <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-cyan-500">empatía y transparencia</span>
               </h1>
 
               <p className="text-sm md:text-base text-slate-500 leading-relaxed font-medium max-w-xl">
@@ -242,7 +266,7 @@ export default function Page() {
               </TextRollButton>
               <a 
                 href="#servicios" 
-                className="text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 transition-colors py-2"
+                className="text-xs font-extrabold uppercase tracking-wider text-slate-500 hover:text-slate-800 transition-colors py-2"
               >
                 Conocer Soluciones
               </a>
@@ -254,15 +278,16 @@ export default function Page() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="lg:col-span-5 bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-6 lg:p-8 flex flex-col justify-center items-center shadow-sm relative overflow-hidden group"
+            whileHover={{ y: -8, scale: 1.01 }}
+            className="lg:col-span-5 bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-6 lg:p-8 flex flex-col justify-center items-center shadow-sm relative overflow-hidden group hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
           >
             {/* Tech grid dots overlay */}
             <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] bg-[size:1.5rem_1.5rem] opacity-30 pointer-events-none" />
 
-            {/* Premium Mobile Phone Frame */}
+            {/* Mobile Phone Frame */}
             <div className="w-full max-w-[300px] bg-slate-950 rounded-[40px] border-4 border-slate-900 shadow-2xl overflow-hidden relative ring-8 ring-slate-100/50">
               
-              {/* Phone Dynamic Island */}
+              {/* Dynamic Island */}
               <div className="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-5 bg-black rounded-full z-30 flex items-center justify-center">
                 <span className="w-2.5 h-2.5 rounded-full bg-slate-900 block" />
               </div>
@@ -302,7 +327,7 @@ export default function Page() {
                     </div>
 
                     {/* Counter Buttons */}
-                    <div className="flex items-center gap-1 bg-slate-950 border border-slate-850 rounded-lg p-1 shrink-0">
+                    <div className="flex items-center gap-1 bg-slate-950 border border-slate-855 rounded-lg p-1 shrink-0">
                       <button 
                         onClick={() => handleDecrement(item.id)}
                         className="w-4 h-4 rounded bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center font-bold text-[9px] border border-slate-700/60"
@@ -322,7 +347,7 @@ export default function Page() {
               </div>
 
               {/* Mockup Checkout */}
-              <div className="border-t border-slate-850 p-4 bg-slate-950 flex flex-col gap-2">
+              <div className="border-t border-slate-855 p-4 bg-slate-950 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="block text-[8px] text-slate-500 font-extrabold uppercase tracking-wider">Total Pedido</span>
@@ -348,8 +373,12 @@ export default function Page() {
 
         {/* SECTION 2: EL PROBLEMA & LA SOLUCIÓN */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-100">
+          
           {/* El Problema */}
-          <div className="bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+          <motion.div 
+            whileHover={{ y: -8, scale: 1.01 }}
+            className="bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between relative overflow-hidden group hover:border-red-500/40 hover:shadow-lg hover:shadow-red-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          >
             <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(239,68,68,0.02),transparent_90%)] pointer-events-none" />
             <div className="space-y-6">
               <div className="w-10 h-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center border border-red-100">
@@ -365,10 +394,13 @@ export default function Page() {
             <div className="mt-8 pt-4 border-t border-slate-100 flex items-center gap-2 text-[10px] font-extrabold uppercase text-slate-400 tracking-wider">
               <span>Sitios lentos • Comisiones altas • Enredos técnicos</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* La Solución */}
-          <div className="bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between relative overflow-hidden group hover:border-[#10B981]/45 transition-all duration-300">
+          <motion.div 
+            whileHover={{ y: -8, scale: 1.01 }}
+            className="bg-[#FFFFFF] border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between relative overflow-hidden group hover:border-[#10B981]/45 hover:shadow-lg hover:shadow-emerald-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          >
             <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(16,185,129,0.02),transparent_90%)] pointer-events-none" />
             <div className="space-y-6">
               <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#10B981] flex items-center justify-center border border-emerald-100">
@@ -384,7 +416,7 @@ export default function Page() {
             <div className="mt-8 pt-4 border-t border-slate-100 flex items-center gap-2 text-[10px] font-extrabold uppercase text-[#10B981] tracking-wider">
               <span>Cero mensualidad • Autogestionable • Pedidos al WhatsApp</span>
             </div>
-          </div>
+          </motion.div>
         </section>
 
         {/* SECTION 3: SERVICIOS (Bento Grid) */}
@@ -394,15 +426,15 @@ export default function Page() {
               <Sparkles className="w-3.5 h-3.5" />
               Catálogo de Soluciones
             </span>
-            <h2 className="text-2xl md:text-3xl font-black text-[#0F172A] tracking-tight">Servicios Digitales con Estilo Bento</h2>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#0F172A] tracking-tight">Servicios Digitales con Estilo Bento</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
             {/* Box 1 */}
             <motion.div 
-              whileHover={{ y: -6 }}
-              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[360px] relative overflow-hidden group hover:border-[#10B981]/50 transition-all duration-300"
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[360px] relative overflow-hidden group hover:border-[#10B981]/50 hover:shadow-lg hover:shadow-emerald-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
             >
               <div className="space-y-6">
                 <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#10B981] flex items-center justify-center border border-emerald-100 group-hover:scale-105 transition-transform duration-300">
@@ -423,8 +455,8 @@ export default function Page() {
 
             {/* Box 2 */}
             <motion.div 
-              whileHover={{ y: -6 }}
-              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[360px] relative overflow-hidden group hover:border-[#06B6D4]/50 transition-all duration-300"
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[360px] relative overflow-hidden group hover:border-[#06B6D4]/50 hover:shadow-lg hover:shadow-cyan-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
             >
               <div className="space-y-6">
                 <div className="w-12 h-12 rounded-xl bg-cyan-50 text-[#06B6D4] flex items-center justify-center border border-cyan-100 group-hover:scale-105 transition-transform duration-300">
@@ -445,8 +477,8 @@ export default function Page() {
 
             {/* Box 3 */}
             <motion.div 
-              whileHover={{ y: -6 }}
-              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[360px] relative overflow-hidden group hover:border-slate-800/30 transition-all duration-300"
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm flex flex-col justify-between min-h-[360px] relative overflow-hidden group hover:border-slate-800/35 hover:shadow-lg hover:shadow-slate-800/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
             >
               <div className="space-y-6">
                 <div className="w-12 h-12 rounded-xl bg-slate-50 text-[#0F172A] flex items-center justify-center border border-slate-200 group-hover:scale-105 transition-transform duration-300">
@@ -475,13 +507,16 @@ export default function Page() {
               <Compass className="w-3.5 h-3.5" />
               Metodología Ágil
             </span>
-            <h2 className="text-2xl md:text-3xl font-black text-[#0F172A] tracking-tight">Proceso de Trabajo: Conexión → Creación → Lanzamiento</h2>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#0F172A] tracking-tight">Proceso de Trabajo: Conexión → Creación → Lanzamiento</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto relative">
             
             {/* Step 1 */}
-            <div className="bg-slate-50 border border-slate-200/60 rounded-3xl p-8 relative flex flex-col justify-between shadow-sm group">
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="bg-slate-50 border border-slate-200/60 rounded-3xl p-8 relative flex flex-col justify-between shadow-sm group hover:border-[#10B981]/40 hover:shadow-lg hover:shadow-emerald-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            >
               <div className="space-y-4">
                 <div className="text-xs font-black text-slate-400 uppercase tracking-widest flex justify-between items-center">
                   <span>Paso 01</span>
@@ -492,10 +527,13 @@ export default function Page() {
                   Conversamos para entender tu negocio en profundidad. Definimos las metas, el presupuesto ideal y trazamos un alcance libre de sorpresas técnicas.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Step 2 */}
-            <div className="bg-slate-50 border border-slate-200/60 rounded-3xl p-8 relative flex flex-col justify-between shadow-sm group">
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="bg-slate-50 border border-slate-200/60 rounded-3xl p-8 relative flex flex-col justify-between shadow-sm group hover:border-[#10B981]/50 hover:shadow-lg hover:shadow-emerald-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            >
               <div className="space-y-4">
                 <div className="text-xs font-black text-[#10B981] uppercase tracking-widest flex justify-between items-center">
                   <span>Paso 02</span>
@@ -506,10 +544,13 @@ export default function Page() {
                   Diseñamos prototipos funcionales y escribimos código moderno. Te enviamos links de prueba interactivos para que veas el avance en tiempo real.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Step 3 */}
-            <div className="bg-slate-50 border border-slate-200/60 rounded-3xl p-8 relative flex flex-col justify-between shadow-sm group">
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="bg-slate-50 border border-slate-200/60 rounded-3xl p-8 relative flex flex-col justify-between shadow-sm group hover:border-[#06B6D4]/50 hover:shadow-lg hover:shadow-cyan-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            >
               <div className="space-y-4">
                 <div className="text-xs font-black text-[#06B6D4] uppercase tracking-widest flex justify-between items-center">
                   <span>Paso 03</span>
@@ -520,7 +561,7 @@ export default function Page() {
                   Publicamos tu plataforma en el hosting definitivo y te enseñamos a autogestionar el contenido con videos cortos creados exclusivamente para ti.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </section>
@@ -532,13 +573,16 @@ export default function Page() {
               <Users className="w-3.5 h-3.5" />
               Socios Estratégicos
             </span>
-            <h2 className="text-2xl md:text-3xl font-black text-[#0F172A] tracking-tight">El Equipo Detrás de S&M</h2>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#0F172A] tracking-tight">El Equipo Detrás de S&M</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             
             {/* Profile Andri */}
-            <div className="bg-white border border-slate-200/80 rounded-3xl p-8 flex flex-col sm:flex-row items-start gap-6 shadow-sm relative overflow-hidden">
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="bg-white border border-slate-200/80 rounded-3xl p-8 flex flex-col sm:flex-row items-start gap-6 shadow-sm relative overflow-hidden group hover:border-[#10B981]/50 hover:shadow-lg hover:shadow-emerald-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            >
               {/* Tech grid overlay */}
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] opacity-40 pointer-events-none" />
 
@@ -554,10 +598,13 @@ export default function Page() {
                   Asesor de clientes empático, encargado de la transparencia en la presupuestación y de escuchar en detalle la historia comercial de tu negocio.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Profile Jeshua */}
-            <div className="bg-white border border-slate-200/80 rounded-3xl p-8 flex flex-col sm:flex-row items-start gap-6 shadow-sm relative overflow-hidden">
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="bg-white border border-slate-200/80 rounded-3xl p-8 flex flex-col sm:flex-row items-start gap-6 shadow-sm relative overflow-hidden group hover:border-[#06B6D4]/50 hover:shadow-lg hover:shadow-cyan-500/5 transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            >
               {/* Tech grid overlay */}
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] opacity-40 pointer-events-none" />
 
@@ -573,7 +620,7 @@ export default function Page() {
                   Especialista en código a medida, ejecución flexible y transformación de ideas de negocios locales en robustas aplicaciones y menús web.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </section>
@@ -582,13 +629,14 @@ export default function Page() {
         <section id="contacto" className="max-w-3xl mx-auto">
           <motion.div 
             layout
-            className="bg-[#0F172A] text-white border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden"
+            whileHover={{ scale: 1.01 }}
+            className="bg-[#0F172A] text-white border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden transition-all duration-550 ease-[cubic-bezier(0.16,1,0.3,1)]"
           >
             {/* Accent light flare */}
             <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="text-center space-y-3 mb-8">
-              <h3 className="text-2xl md:text-3xl font-black tracking-tight leading-tight">
+              <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-tight">
                 ¿Listo para darle a tu negocio la visibilidad que merece? Conversemos.
               </h3>
               <p className="text-xs text-slate-400 font-medium">
@@ -628,7 +676,7 @@ export default function Page() {
                       placeholder="Juan Pérez"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-650"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-600"
                     />
                   </div>
 
@@ -643,7 +691,7 @@ export default function Page() {
                       placeholder="Ej. Dona Flor Gourmet, Distribuidora El Bosque..."
                       value={formData.businessName}
                       onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-650"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-600"
                     />
                   </div>
 
@@ -658,7 +706,7 @@ export default function Page() {
                       placeholder="Ej. +56 9 1234 5678"
                       value={formData.whatsapp}
                       onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-650"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-900/60 focus:outline-none focus:ring-1 focus:ring-[#10B981] focus:border-[#10B981] transition-all text-xs font-medium text-white placeholder-slate-600"
                     />
                   </div>
 
