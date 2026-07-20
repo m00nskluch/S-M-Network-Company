@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import { GeistMono } from 'geist/font/mono';
 import { Outfit, Inter } from 'next/font/google';
 import './globals.css';
+import { LenisProvider } from './components/LenisProvider';
 
 const outfit = Outfit({
   variable: '--font-outfit',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   display: 'swap',
 });
 
@@ -53,7 +54,9 @@ export default function RootLayout({
       lang="es"
       className={`${outfit.variable} ${inter.variable} ${GeistMono.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col antialiased">{children}</body>
+      <body className="min-h-full flex flex-col antialiased">
+        <LenisProvider>{children}</LenisProvider>
+      </body>
     </html>
   );
 }

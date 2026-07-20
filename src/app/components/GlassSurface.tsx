@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
-export type GlassSurfaceVariant = 'default' | 'strong' | 'subtle' | 'fogged';
+export type GlassSurfaceVariant = 'default' | 'strong' | 'subtle' | 'fogged' | 'glow';
 
 const variantClass: Record<GlassSurfaceVariant, string> = {
   default: 'glass-surface',
   strong:  'glass-surface glass-surface-strong',
   subtle:  'glass-surface glass-surface-subtle',
   fogged:  'glass-surface glass-fogged',
+  glow:    'glass-surface glass-surface-glow',
 };
 
 /* ── GlassSurface ────────────────────────────────────────────── */
@@ -44,12 +45,14 @@ export function GlassSurface({
   );
 }
 
-/* ── SpotlightCard ───────────────────────────────────────────── */
+/* ── SpotlightCard — with optional 3D Tilt ───────────────────── */
 interface SpotlightCardProps {
   children: React.ReactNode;
   variant?: GlassSurfaceVariant;
   className?: string;
   id?: string;
+  tilt?: boolean;
+  tiltStrength?: number;
 }
 
 export function SpotlightCard({
@@ -57,21 +60,44 @@ export function SpotlightCard({
   variant = 'default',
   className = '',
   id,
+  tilt = true,
+  tiltStrength = 8,
 }: SpotlightCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (prefersReduced || !ref.current) return;
       const rect = ref.current.getBoundingClientRect();
+
+      // Spotlight tracking
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
       ref.current.style.setProperty('--x', `${x}%`);
       ref.current.style.setProperty('--y', `${y}%`);
+
+      // 3D tilt — map cursor position to rotation degrees
+      if (tilt) {
+        const cx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+        const cy = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+        setRotateY(cx * tiltStrength);
+        setRotateX(-cy * tiltStrength);
+      }
     },
-    [prefersReduced]
+    [prefersReduced, tilt, tiltStrength]
   );
+
+  const handlePointerLeave = useCallback(() => {
+    setRotateX(0);
+    setRotateY(0);
+    if (ref.current) {
+      ref.current.style.setProperty('--x', '50%');
+      ref.current.style.setProperty('--y', '50%');
+    }
+  }, []);
 
   return (
     <motion.div
@@ -79,9 +105,24 @@ export function SpotlightCard({
       id={id}
       className={`${variantClass[variant]} spotlight-card ${className}`}
       onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      style={{ transformStyle: 'preserve-3d' }}
+      animate={
+        prefersReduced
+          ? {}
+          : {
+              rotateX,
+              rotateY,
+            }
+      }
       whileHover={prefersReduced ? {} : { y: -6, scale: 1.012 }}
       whileTap={prefersReduced ? {} : { scale: 0.988 }}
-      transition={{ duration: 0.38, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+      transition={{
+        duration: 0.22,
+        ease: [0.25, 0.46, 0.45, 0.94] as const,
+        rotateX: { type: 'spring', stiffness: 180, damping: 22 },
+        rotateY: { type: 'spring', stiffness: 180, damping: 22 },
+      }}
     >
       {children}
     </motion.div>
@@ -109,6 +150,7 @@ interface StatusBadgeProps {
   color?: BadgeColor;
   className?: string;
   dot?: boolean;
+  shimmer?: boolean;
 }
 
 export function StatusBadge({
@@ -116,15 +158,18 @@ export function StatusBadge({
   color = 'sage',
   className = '',
   dot = false,
+  shimmer = false,
 }: StatusBadgeProps) {
   const { bg, border } = badgeStyle[color];
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-[9px] font-bold uppercase tracking-widest ${className}`}
+      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-[9px] font-bold uppercase tracking-widest ${shimmer ? 'shimmer-badge' : ''} ${className}`}
       style={{
         background: bg,
         border: `1px solid ${border}`,
         color: 'var(--sm-slate)',  /* slate text on pastel bg = AA+ always */
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       {dot && (

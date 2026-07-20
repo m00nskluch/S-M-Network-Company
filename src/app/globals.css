@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 /* ============================================================
-   S&M NETWORK COMPANY — SOFT GLASS & CLOUD BLUE v4
+   S&M NETWORK COMPANY — SOFT GLASS & CLOUD BLUE v5
    Light-base Liquid Glass — #F8F9FA Blanco Hueso foundation
+   Awwwards / FWA Level — Full Premium Edition
    ============================================================ */
 
 /* ── Design Tokens ──────────────────────────────────────────── */
@@ -33,10 +34,12 @@
   --sm-shadow-sm: 0 4px 16px rgba(112, 161, 215, 0.14), 0 2px 6px rgba(30, 41, 59, 0.06);
   --sm-shadow-md: 0 8px 32px rgba(112, 161, 215, 0.18), 0 4px 12px rgba(30, 41, 59, 0.08);
   --sm-shadow-lg: 0 16px 56px rgba(112, 161, 215, 0.22), 0 8px 24px rgba(30, 41, 59, 0.10);
+  --sm-shadow-xl: 0 28px 80px rgba(112, 161, 215, 0.26), 0 12px 36px rgba(30, 41, 59, 0.12);
 
   /* Glow — sky blue, never harsh */
   --sm-glow-sky:    0 0 28px rgba(112, 161, 215, 0.28);
   --sm-glow-sky-sm: 0 0 12px rgba(142, 197, 252, 0.22);
+  --sm-glow-sky-lg: 0 0 60px rgba(142, 197, 252, 0.32);
 
   /* Motion */
   --ease-liquid: cubic-bezier(0.16, 1, 0.3, 1);
@@ -160,6 +163,22 @@ body {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), var(--sm-shadow-xs);
 }
 
+/* Glow variant — pulsing sky-blue halo */
+.glass-surface-glow {
+  background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.62));
+  border-color: rgba(112, 161, 215, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    var(--sm-shadow-lg),
+    var(--sm-glow-sky);
+  animation: glowPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  from { box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), var(--sm-shadow-lg), 0 0 28px rgba(112,161,215,0.22); }
+  to   { box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), var(--sm-shadow-lg), 0 0 48px rgba(112,161,215,0.38); }
+}
+
 /* Fogged / desaturated — used on Problem card */
 .glass-fogged {
   background: rgba(245, 244, 240, 0.72);   /* bg-alt, more opaque */
@@ -176,7 +195,8 @@ body {
 @supports not (backdrop-filter: blur(1px)) {
   .glass-surface,
   .glass-surface-strong,
-  .glass-surface-subtle {
+  .glass-surface-subtle,
+  .glass-surface-glow {
     background: rgba(255, 255, 255, 0.94);
   }
   .glass-fogged { background: #F0EFE9; }
@@ -224,7 +244,7 @@ body {
   z-index: 2;
 }
 
-/* ── Liquid Backdrop — CSS-only gradient mesh ────────────────── */
+/* ── Liquid Backdrop — CSS-only gradient mesh (legacy) ───────── */
 .liquid-backdrop {
   position: absolute;
   inset: 0;
@@ -274,6 +294,109 @@ body {
   to   { transform: translate3d(60px, -44px, 0) scale(1.09); }
 }
 
+/* ── Hero Dot Grid Pattern ───────────────────────────────────── */
+.hero-dot-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(
+    circle,
+    rgba(112, 161, 215, 0.18) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
+  mask-image: radial-gradient(
+    ellipse 80% 80% at 50% 50%,
+    #000 0%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 80% at 50% 50%,
+    #000 0%,
+    transparent 100%
+  );
+  opacity: 0.45;
+}
+
+/* ── Text Gradient — Sky to Lavender ────────────────────────── */
+.text-gradient-sky {
+  background: linear-gradient(
+    135deg,
+    var(--sm-sky) 0%,
+    var(--sm-sky-light) 50%,
+    var(--sm-lavender) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Shimmer Badge — animated light sweep on badge ──────────── */
+.shimmer-badge {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.65) 50%,
+    transparent 70%
+  );
+  animation: shimmerSweep 3.2s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+@keyframes shimmerSweep {
+  0%   { left: -100%; }
+  40%  { left: 160%; }
+  100% { left: 160%; }
+}
+
+/* ── Stat Counter Pill ───────────────────────────────────────── */
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(112, 161, 215, 0.28);
+  box-shadow: var(--sm-shadow-xs);
+}
+
+/* ── Section Number Decoration ──────────────────────────────── */
+.section-num-deco {
+  position: absolute;
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(112, 161, 215, 0.12);
+  pointer-events: none;
+  select: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* ── Orb Glow — standalone atmospheric circle ───────────────── */
+.orb-glow {
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  will-change: transform;
+}
+
 /* ── Nav Progress Bar ───────────────────────────────────────── */
 .nav-progress {
   position: absolute;
@@ -306,7 +429,7 @@ body {
 }
 .glass-cta-btn:hover::before { left: 160%; }
 
-/* ── Floating label inputs ───────────────────────────────────── */
+/* ── Floating label inputs (legacy — kept for backward compat) ── */
 .float-label-group { position: relative; }
 .float-label-group input {
   padding-top: 1.5rem;
@@ -370,6 +493,23 @@ body {
 }
 .spring-pop { animation: springPop 0.36s var(--ease-spring) forwards; }
 
+/* ── Process timeline glowing node ──────────────────────────── */
+@keyframes nodeGlow {
+  0%   { box-shadow: 0 0 0 0 rgba(112, 161, 215, 0.4); }
+  70%  { box-shadow: 0 0 0 10px rgba(112, 161, 215, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(112, 161, 215, 0); }
+}
+.node-active-glow {
+  animation: nodeGlow 1.8s ease-in-out infinite;
+}
+
+/* ── WhatsApp float badge ────────────────────────────────────── */
+@keyframes waBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+.wa-float { animation: waBounce 2.8s ease-in-out infinite; }
+
 /* ── Typography ─────────────────────────────────────────────── */
 h1, h2 {
   font-family: var(--font-display);
@@ -413,4 +553,8 @@ h3, h4 {
   .liquid-backdrop::after { animation: none !important; }
   .marquee-track { animation: none !important; }
   .glass-cta-btn::before { display: none; }
+  .shimmer-badge::after { display: none; }
+  .glass-surface-glow { animation: none; }
+  .node-active-glow { animation: none; }
+  .wa-float { animation: none; }
 }

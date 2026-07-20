@@ -32,12 +32,20 @@ import {
   Sparkles,
   ChevronRight,
   Heart,
+  MessageCircle,
+  Zap,
+  Shield,
+  Star,
+  Phone,
+  MapPin,
 } from 'lucide-react';
 
 import { GlassSurface, SpotlightCard, StatusBadge } from './components/GlassSurface';
 import { MagneticButton } from './components/MagneticButton';
 import { SectionReveal, StaggerReveal, StaggerItem } from './components/SectionReveal';
 import { LogoIsotype } from './components/LogoIsotype';
+import { FloatingOrbs } from './components/FloatingOrbs';
+import { GlassInput } from './components/GlassInput';
 
 /* ─── Mock server action ─────────────────────────────────────── */
 async function sendLeadEmail(data: {
@@ -65,9 +73,9 @@ function WordReveal({ text, className = '' }: { text: string; className?: string
         <motion.span
           key={i}
           className="inline-block mr-[0.26em]"
-          initial={{ opacity: 0, y: 16, filter: 'blur(4px)' }}
+          initial={{ opacity: 0, y: 20, filter: 'blur(6px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ ...liquid, delay: 0.3 + i * 0.036 }}
+          transition={{ ...liquid, delay: 0.3 + i * 0.04 }}
         >
           {word}
         </motion.span>
@@ -92,7 +100,7 @@ function AnimatedNumber({ value }: { value: number }) {
   return <>{display.toLocaleString('es-CL')}</>;
 }
 
-/* ─── Santiago Time Capsule (reused in nav + hero) ───────────── */
+/* ─── Santiago Time Capsule ──────────────────────────────────── */
 function TimeCapsule({ time }: { time: string }) {
   return (
     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[rgba(112,161,215,0.28)] bg-[rgba(255,255,255,0.55)] backdrop-blur-sm shadow-[var(--sm-shadow-xs)]">
@@ -215,15 +223,15 @@ function ProcesosSection() {
 
   const steps = [
     {
-      num: '01', label: 'Conexión', cy: 80,
+      num: '01', label: 'Conexión', cy: 80, icon: <Phone className="w-4 h-4" />,
       desc: 'Andri escucha la historia y visión de tu negocio. Analizamos tus necesidades reales y definimos un presupuesto transparente sin sorpresas.',
     },
     {
-      num: '02', label: 'Creación', cy: 240,
+      num: '02', label: 'Creación', cy: 240, icon: <Zap className="w-4 h-4" />,
       desc: 'Jeshua desarrolla código a medida en Next.js. Prototipamos la interfaz y te enviamos demos para revisar cada detalle contigo.',
     },
     {
-      num: '03', label: 'Lanzamiento', cy: 400,
+      num: '03', label: 'Lanzamiento', cy: 400, icon: <Star className="w-4 h-4" />,
       desc: 'Publicamos tu web en el dominio definitivo y capacitamos a tu equipo para autogestionar el sitio con facilidad.',
     },
   ];
@@ -250,7 +258,7 @@ function ProcesosSection() {
   }
 
   return (
-    <div ref={containerRef} className="relative h-[280vh]">
+    <div ref={containerRef} className="relative h-[260vh]">
       <div className="sticky top-24 h-screen flex items-start pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full max-w-5xl mx-auto items-start">
 
@@ -259,31 +267,42 @@ function ProcesosSection() {
             {steps.map((step, i) => (
               <motion.div
                 key={step.num}
-                className={`lg:absolute lg:left-0 lg:right-0 p-6 rounded-2xl ${
+                className={`lg:absolute lg:left-0 lg:right-0 p-6 rounded-2xl glass-surface ${
                   i === 0 ? 'lg:top-0' : i === 1 ? 'lg:top-[160px]' : 'lg:top-[320px]'
                 }`}
                 animate={{
-                  opacity: activeStep === i ? 1 : 0.28,
-                  scale: activeStep === i ? 1 : 0.97,
-                  y: activeStep === i ? 0 : 6,
+                  opacity: activeStep === i ? 1 : 0.22,
+                  scale: activeStep === i ? 1 : 0.965,
+                  y: activeStep === i ? 0 : 8,
                 }}
                 transition={liquid}
               >
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className="w-8 h-8 rounded-xl flex items-center justify-center border"
+                    style={{
+                      background: activeStep === i ? 'rgba(112,161,215,0.12)' : 'rgba(112,161,215,0.04)',
+                      borderColor: activeStep === i ? 'rgba(112,161,215,0.35)' : 'rgba(112,161,215,0.12)',
+                      color: 'var(--sm-sky)',
+                      transition: 'all 0.4s ease',
+                    }}
+                  >
+                    {step.icon}
+                  </div>
                   <span className="font-mono text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--sm-sky)' }}>
                     Paso {step.num}
                   </span>
-                  <div className="h-px flex-1" style={{ background: 'rgba(112,161,215,0.2)' }} />
+                  <div className="h-px flex-1" style={{ background: 'rgba(112,161,215,0.18)' }} />
                 </div>
                 <h4 className="font-display font-bold text-2xl mb-3" style={{ color: 'var(--sm-slate)' }}>
-                  {step.num}. {step.label}
+                  {step.label}
                 </h4>
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--sm-slate-mid)' }}>{step.desc}</p>
               </motion.div>
             ))}
           </div>
 
-          {/* Right: SVG network */}
+          {/* Right: SVG network timeline */}
           <div className="hidden lg:flex justify-center items-center">
             <GlassSurface variant="subtle" className="p-8 w-full max-w-[280px]">
               <svg viewBox="0 0 200 480" className="w-full" fill="none">
@@ -305,32 +324,44 @@ function ProcesosSection() {
                 {steps.map((step, i) => (
                   <g key={step.num}>
                     <motion.circle
-                      cx="100" cy={step.cy} r="28"
-                      fill="rgba(255,255,255,0.6)"
-                      stroke={activeStep >= i ? '#70A1D7' : 'rgba(112,161,215,0.2)'}
+                      cx="100" cy={step.cy} r="30"
+                      fill={activeStep >= i ? 'rgba(112,161,215,0.10)' : 'rgba(255,255,255,0.4)'}
+                      stroke={activeStep >= i ? '#70A1D7' : 'rgba(112,161,215,0.18)'}
                       strokeWidth="1.5"
                       animate={{
-                        opacity: activeStep >= i ? 1 : 0.35,
-                        scale: activeStep === i ? 1.08 : 1,
+                        opacity: activeStep >= i ? 1 : 0.3,
+                        scale: activeStep === i ? 1.12 : 1,
                       }}
                       transition={spring}
+                      className={activeStep === i ? 'node-active-glow' : ''}
                     />
+                    {/* Outer ring for active */}
+                    {activeStep === i && (
+                      <motion.circle
+                        cx="100" cy={step.cy} r="38"
+                        fill="none"
+                        stroke="rgba(112,161,215,0.25)"
+                        strokeWidth="1"
+                        animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
+                        transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                      />
+                    )}
                     <motion.text
                       x="100" y={step.cy + 1}
                       textAnchor="middle" dominantBaseline="middle"
                       fontSize="11" fontFamily="var(--font-mono)" fontWeight="700"
-                      fill={activeStep >= i ? '#1E293B' : 'rgba(30,41,59,0.3)'}
-                      animate={{ opacity: activeStep >= i ? 1 : 0.3 }}
+                      fill={activeStep >= i ? '#1E293B' : 'rgba(30,41,59,0.28)'}
+                      animate={{ opacity: activeStep >= i ? 1 : 0.28 }}
                       transition={liquid}
                     >
                       {step.num}
                     </motion.text>
                     <motion.text
-                      x="100" y={step.cy + 44}
+                      x="100" y={step.cy + 46}
                       textAnchor="middle" fontSize="9"
                       fontFamily="var(--font-body)" fontWeight="600"
-                      fill="rgba(30,41,59,0.45)"
-                      animate={{ opacity: activeStep >= i ? 0.75 : 0.2 }}
+                      fill="rgba(30,41,59,0.42)"
+                      animate={{ opacity: activeStep >= i ? 0.75 : 0.18 }}
                       transition={liquid}
                     >
                       {step.label}
@@ -342,31 +373,6 @@ function ProcesosSection() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-/* ─── Floating label input ───────────────────────────────────── */
-function FloatInput({
-  id, label, type = 'text', value, onChange, required,
-}: {
-  id: string; label: string; type?: string;
-  value: string; onChange: (v: string) => void; required?: boolean;
-}) {
-  return (
-    <div className="float-label-group">
-      <input
-        id={id} type={type} required={required} placeholder=" "
-        value={value} onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 backdrop-blur-sm"
-        style={{
-          border: '1px solid rgba(112,161,215,0.3)',
-          background: 'rgba(255,255,255,0.62)',
-          color: 'var(--sm-slate)',
-        }}
-        aria-label={label}
-      />
-      <label htmlFor={id}>{label}</label>
     </div>
   );
 }
@@ -403,11 +409,40 @@ function CursorHalo() {
         background: 'rgba(142,197,252,0.55)',
         boxShadow: '0 0 14px 3px rgba(112,161,215,0.25)',
         filter: 'blur(1px)',
-        mixBlendMode: 'multiply',    /* multiply on light bg, not screen */
+        mixBlendMode: 'multiply',
         willChange: 'transform',
       }}
       aria-hidden="true"
     />
+  );
+}
+
+/* ─── Stat Pill ──────────────────────────────────────────────── */
+function StatPill({
+  icon,
+  value,
+  label,
+  delay = 0,
+}: {
+  icon: React.ReactNode;
+  value: string;
+  label: string;
+  delay?: number;
+}) {
+  const prefersReduced = useReducedMotion();
+  return (
+    <motion.div
+      className="stat-pill"
+      initial={prefersReduced ? {} : { opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ ...liquid, delay }}
+    >
+      <span style={{ color: 'var(--sm-sky)' }}>{icon}</span>
+      <div className="leading-none">
+        <span className="block font-mono text-xs font-black" style={{ color: 'var(--sm-slate)' }}>{value}</span>
+        <span className="block font-mono text-[8px] uppercase tracking-wider mt-0.5" style={{ color: 'var(--sm-slate-mid)' }}>{label}</span>
+      </div>
+    </motion.div>
   );
 }
 
@@ -476,7 +511,7 @@ export default function Page() {
   return (
     <div className="min-h-screen overflow-x-hidden" style={{ background: 'var(--sm-bg)', color: 'var(--sm-slate)' }}>
 
-      {/* Desktop cursor halo (mix-blend-mode: multiply) */}
+      {/* Desktop cursor halo */}
       <CursorHalo />
 
       {/* ── Floating Nav ── */}
@@ -485,36 +520,39 @@ export default function Page() {
       {/* ══════════════════════════════════════════════════════
           HERO SECTION
           ══════════════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col justify-center pt-28 pb-16 px-4 md:px-8 max-w-7xl mx-auto">
-        <div className="liquid-backdrop rounded-[3rem]" aria-hidden="true" />
+      <section className="relative min-h-screen flex flex-col justify-center pt-28 pb-16 px-4 md:px-8 max-w-7xl mx-auto overflow-hidden">
+
+        {/* Atmospheric background */}
+        <FloatingOrbs palette="mixed" intensity="medium" />
+
+        {/* Dot grid pattern */}
+        <div className="hero-dot-grid" aria-hidden="true" />
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
           {/* ── Left: Value Prop ─────────────────────────── */}
           <motion.div
             className="lg:col-span-7"
-            initial={prefersReduced ? {} : { opacity: 0, y: 24 }}
+            initial={prefersReduced ? {} : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...liquid, delay: 0.15 }}
           >
-            <GlassSurface variant="strong" className="p-8 lg:p-12 flex flex-col justify-between min-h-[480px]">
+            <GlassSurface variant="strong" className="p-8 lg:p-12 flex flex-col justify-between min-h-[500px]">
               <div className="space-y-7">
-                {/* Badge chips — pastel bg + slate text, AA verified */}
+                {/* Badge chips */}
                 <div className="flex flex-wrap gap-2">
-                  <StatusBadge color="sky" dot>React / Next.js</StatusBadge>
+                  <StatusBadge color="sky" dot shimmer>React / Next.js</StatusBadge>
                   <StatusBadge color="lavender">Tailored Code</StatusBadge>
                   <StatusBadge color="neutral">Santiago, CL 🇨🇱</StatusBadge>
                 </div>
 
                 <h1
-                  className="text-4xl md:text-5xl lg:text-[52px] font-bold leading-[1.07]"
-                  style={{ fontFamily: 'var(--font-display)', color: 'var(--sm-slate)', letterSpacing: '-0.03em' }}
+                  className="text-4xl md:text-5xl lg:text-[54px] font-black leading-[1.06]"
+                  style={{ fontFamily: 'var(--font-display)', color: 'var(--sm-slate)', letterSpacing: '-0.035em' }}
                 >
                   <WordReveal text="Impulsamos el crecimiento digital de tu PYME con" />
                   {' '}
-                  <span className="bg-clip-text text-transparent" style={{
-                    backgroundImage: 'linear-gradient(135deg, var(--sm-sky) 0%, var(--sm-sky-light) 50%, var(--sm-lavender) 100%)',
-                  }}>
+                  <span className="text-gradient-sky">
                     <WordReveal text="empatía y transparencia" />
                   </span>
                 </h1>
@@ -524,17 +562,29 @@ export default function Page() {
                   style={{ color: 'var(--sm-slate-mid)' }}
                   initial={prefersReduced ? {} : { opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ ...liquid, delay: 0.95 }}
+                  transition={{ ...liquid, delay: 1.0 }}
                 >
                   Desarrollamos soluciones web únicas y rápidas para restaurantes, comercios locales y distribuidoras en Santiago. Sin cobros mensuales amarrados, con presupuesto justo y comunicación cercana.
                 </motion.p>
+
+                {/* Stat pills */}
+                <motion.div
+                  className="flex flex-wrap gap-3"
+                  initial={prefersReduced ? {} : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ ...liquid, delay: 1.15 }}
+                >
+                  <StatPill icon={<Zap className="w-3 h-3" />} value="12+" label="PYMEs impulsadas" delay={1.2} />
+                  <StatPill icon={<Shield className="w-3 h-3" />} value="100%" label="Código propio" delay={1.28} />
+                  <StatPill icon={<Star className="w-3 h-3" />} value="$0" label="Cobros mensuales" delay={1.36} />
+                </motion.div>
               </div>
 
               <motion.div
                 className="pt-8 flex flex-col sm:flex-row gap-4"
                 initial={prefersReduced ? {} : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ ...liquid, delay: 1.1 }}
+                transition={{ ...liquid, delay: 1.18 }}
               >
                 <MagneticButton href="#contacto" variant="primary" className="px-8 py-3.5 text-xs">
                   <ArrowRight className="w-3.5 h-3.5 shrink-0" />
@@ -547,28 +597,34 @@ export default function Page() {
             </GlassSurface>
           </motion.div>
 
-          {/* ── Right: Dona Flor Device (Element Seña) ──── */}
+          {/* ── Right: Dona Flor Device ──── */}
           <motion.div
             className="lg:col-span-5"
-            initial={prefersReduced ? {} : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...liquid, delay: 0.28 }}
+            initial={prefersReduced ? {} : { opacity: 0, y: 28, rotateY: -8 }}
+            animate={{ opacity: 1, y: 0, rotateY: 0 }}
+            transition={{ ...liquid, delay: 0.32 }}
+            style={{ perspective: 1200 }}
           >
-            <GlassSurface variant="default" className="p-6 lg:p-8 flex flex-col items-center justify-center min-h-[480px]">
+            <GlassSurface variant="default" className="p-6 lg:p-8 flex flex-col items-center justify-center min-h-[500px]">
 
               {/* Lavender glow behind device */}
               <div
                 className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden"
                 style={{
-                  background: 'radial-gradient(ellipse 60% 55% at 55% 45%, rgba(224,195,252,0.16) 0%, rgba(142,197,252,0.08) 55%, transparent 100%)',
+                  background: 'radial-gradient(ellipse 60% 55% at 55% 45%, rgba(224,195,252,0.18) 0%, rgba(142,197,252,0.08) 55%, transparent 100%)',
                 }}
                 aria-hidden="true"
               />
 
-              {/* Phone frame — sky+lavender chromatic border */}
-              <div
-                className="border-sky-lavender relative w-full max-w-[280px] rounded-[36px] shadow-[0_24px_60px_rgba(112,161,215,0.22),0_8px_20px_rgba(30,41,59,0.1)]"
-                style={{ background: 'rgba(255,255,255,0.9)' }}
+              {/* Phone frame */}
+              <motion.div
+                className="border-sky-lavender relative w-full max-w-[280px] rounded-[36px]"
+                style={{
+                  background: 'rgba(255,255,255,0.92)',
+                  boxShadow: '0 28px 72px rgba(112,161,215,0.26), 0 10px 24px rgba(30,41,59,0.12)',
+                }}
+                whileHover={prefersReduced ? {} : { y: -6, scale: 1.02 }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div className="rounded-[35px] overflow-hidden border border-[rgba(112,161,215,0.18)]">
 
@@ -718,6 +774,14 @@ export default function Page() {
                     </AnimatePresence>
                   </div>
                 </div>
+              </motion.div>
+
+              {/* Tag below device */}
+              <div className="mt-5 flex items-center gap-1.5">
+                <Sparkles className="w-3 h-3" style={{ color: 'var(--sm-sky)' }} />
+                <span className="font-mono text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--sm-slate-mid)' }}>
+                  Demo interactiva real · Sin datos reales
+                </span>
               </div>
             </GlassSurface>
           </motion.div>
@@ -727,21 +791,34 @@ export default function Page() {
       {/* ══════════════════════════════════════════════════════
           SECTION 2: EL PROBLEMA vs. LA SOLUCIÓN
           ══════════════════════════════════════════════════════ */}
-      <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
+      <section
+        className="py-24 px-4 md:px-8 max-w-7xl mx-auto"
+        style={{
+          background: 'linear-gradient(180deg, transparent 0%, rgba(245,244,240,0.55) 40%, rgba(245,244,240,0.55) 60%, transparent 100%)',
+        }}
+      >
         <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {/* Problem — fogged / desaturated glass */}
-          <StaggerItem>
-            <div className="glass-surface glass-fogged rounded-3xl p-8 flex flex-col justify-between min-h-[300px] relative overflow-hidden">
+          <StaggerItem from="left">
+            <div className="glass-surface glass-fogged rounded-3xl p-8 flex flex-col justify-between min-h-[320px] relative overflow-hidden">
+              {/* Subtle red tint overlay */}
+              <div
+                className="absolute inset-0 rounded-3xl pointer-events-none"
+                style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 80%, rgba(239,68,68,0.04), transparent 80%)' }}
+                aria-hidden="true"
+              />
               <div className="space-y-5 relative z-10">
-                <div
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center border"
-                  style={{ background: 'rgba(239,68,68,0.06)', borderColor: 'rgba(239,68,68,0.15)', color: '#DC2626' }}
+                <motion.div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center border"
+                  style={{ background: 'rgba(239,68,68,0.06)', borderColor: 'rgba(239,68,68,0.18)', color: '#DC2626' }}
+                  animate={prefersReduced ? {} : { rotate: [0, -3, 3, -3, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                 >
                   <AlertTriangle className="w-5 h-5" />
-                </div>
+                </motion.div>
                 <div>
-                  <h3 className="font-display font-bold text-xl mb-2" style={{ color: 'var(--sm-slate)' }}>
+                  <h3 className="font-display font-bold text-xl mb-3" style={{ color: 'var(--sm-slate)' }}>
                     El Problema de las PYMEs
                   </h3>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--sm-slate-mid)' }}>
@@ -749,24 +826,32 @@ export default function Page() {
                   </p>
                 </div>
               </div>
-              <div className="mt-6 pt-4 font-mono text-[9px] font-bold uppercase tracking-wider" style={{ borderTop: '1px solid rgba(30,41,59,0.06)', color: 'rgba(30,41,59,0.38)' }}>
+              <div className="mt-6 pt-4 font-mono text-[9px] font-bold uppercase tracking-wider" style={{ borderTop: '1px solid rgba(30,41,59,0.06)', color: 'rgba(30,41,59,0.35)' }}>
                 Sitios lentos · Mensualidades altas · Enredos técnicos
               </div>
             </div>
           </StaggerItem>
 
           {/* Solution — clean glass + specular sweep active */}
-          <StaggerItem>
-            <SpotlightCard className="p-8 flex flex-col justify-between min-h-[300px]">
+          <StaggerItem from="right">
+            <SpotlightCard className="p-8 flex flex-col justify-between min-h-[320px]">
+              {/* Sky glow top */}
+              <div
+                className="absolute inset-0 rounded-3xl pointer-events-none"
+                style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 20%, rgba(142,197,252,0.10), transparent 80%)' }}
+                aria-hidden="true"
+              />
               <div className="space-y-5 relative z-10">
-                <div
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center border"
+                <motion.div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center border"
                   style={{ background: 'rgba(112,161,215,0.10)', borderColor: 'rgba(112,161,215,0.28)', color: 'var(--sm-sky)' }}
+                  animate={prefersReduced ? {} : { scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
                 >
                   <Lightbulb className="w-5 h-5" />
-                </div>
+                </motion.div>
                 <div>
-                  <h3 className="font-display font-bold text-xl mb-2" style={{ color: 'var(--sm-slate)' }}>
+                  <h3 className="font-display font-bold text-xl mb-3" style={{ color: 'var(--sm-slate)' }}>
                     La Solución S&M
                   </h3>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--sm-slate-mid)' }}>
@@ -774,7 +859,7 @@ export default function Page() {
                   </p>
                 </div>
               </div>
-              <div className="mt-6 pt-4 font-mono text-[9px] font-bold uppercase tracking-wider" style={{ borderTop: '1px solid rgba(112,161,215,0.18)', color: 'var(--sm-sky)' }}>
+              <div className="mt-6 pt-4 font-mono text-[9px] font-bold uppercase tracking-wider relative z-10" style={{ borderTop: '1px solid rgba(112,161,215,0.18)', color: 'var(--sm-sky)' }}>
                 Un único pago · Código propio · Conexión directa
               </div>
             </SpotlightCard>
@@ -783,86 +868,184 @@ export default function Page() {
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          SECTION 3: SERVICIOS — Bento
+          SECTION 3: SERVICIOS — Bento Asimétrico
           ══════════════════════════════════════════════════════ */}
-      <section id="servicios" className="py-20 px-4 md:px-8 max-w-7xl mx-auto" style={{ background: 'var(--sm-bg-alt)' }}>
-        <SectionReveal className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <StatusBadge color="sky">
+      <section
+        id="servicios"
+        className="py-24 px-4 md:px-8 max-w-7xl mx-auto relative"
+      >
+        {/* Section background alt-tint */}
+        <div
+          className="absolute inset-0 rounded-[3rem] pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 100% 80% at 50% 50%, rgba(245,244,240,0.7), transparent 80%)',
+          }}
+          aria-hidden="true"
+        />
+
+        <SectionReveal className="text-center max-w-2xl mx-auto mb-14 space-y-3" from="scale">
+          <StatusBadge color="sky" shimmer>
             <Sparkles className="w-3 h-3 inline-block mr-1" />
             Catálogo de Soluciones
           </StatusBadge>
-          <h2 className="font-display font-bold text-3xl md:text-4xl" style={{ color: 'var(--sm-slate)' }}>
+          <h2 className="font-display font-black text-3xl md:text-4xl" style={{ color: 'var(--sm-slate)' }}>
             Servicios Digitales para PYMEs
           </h2>
+          <p className="text-sm" style={{ color: 'var(--sm-slate-mid)' }}>
+            Soluciones pensadas para el mercado local de Santiago, sin costos ocultos.
+          </p>
         </SectionReveal>
 
-        <StaggerReveal className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { icon: <Globe className="w-6 h-6" />, title: 'Páginas Web para PYMEs', desc: 'Plataformas optimizadas para Google y móviles. Atraen clientes de tu zona geográfica en Santiago de forma fluida y profesional.', badge: 'Velocidad + SEO Local' },
-            { icon: <Smartphone className="w-6 h-6" />, title: 'Menús y Catálogos Digitales', desc: 'Catálogos sin comisiones de terceros. Recibe solicitudes detalladas con montos CLP listos para procesar en tu WhatsApp.', badge: 'Precios CLP + WhatsApp' },
-            { icon: <ShoppingBag className="w-6 h-6" />, title: 'Distribución y Venta Online', desc: 'Sistemas simples para distribuidoras y locales. Recopilación ágil de leads y catálogo de inventarios para clientes recurrentes.', badge: 'Automatización de Ventas' },
-          ].map((service) => (
-            <StaggerItem key={service.title}>
-              <SpotlightCard className="p-8 flex flex-col justify-between min-h-[340px]">
-                <div className="space-y-5 relative z-10">
-                  <motion.div
-                    className="w-12 h-12 rounded-2xl border flex items-center justify-center"
-                    style={{ color: 'var(--sm-sky)', borderColor: 'rgba(112,161,215,0.28)', background: 'rgba(112,161,215,0.08)' }}
-                    whileHover={prefersReduced ? {} : { scale: 1.10, rotate: 4 }}
-                    transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] as const }}
-                  >
-                    {service.icon}
-                  </motion.div>
-                  <div>
-                    <h3 className="font-display font-bold text-lg mb-2" style={{ color: 'var(--sm-slate)' }}>
-                      {service.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed" style={{ color: 'var(--sm-slate-mid)' }}>{service.desc}</p>
-                  </div>
+        {/* Bento asymmetric grid */}
+        <StaggerReveal className="grid grid-cols-1 md:grid-cols-3 gap-5 relative z-10">
+          {/* Card 1 — Large featured */}
+          <StaggerItem className="md:col-span-2" from="left">
+            <SpotlightCard className="p-8 lg:p-10 flex flex-col justify-between min-h-[380px] relative">
+              {/* Big decorative number */}
+              <span
+                className="section-num-deco text-[140px] absolute -top-6 -right-4 leading-none"
+                aria-hidden="true"
+              >
+                01
+              </span>
+              <div className="space-y-5 relative z-10">
+                <motion.div
+                  className="w-14 h-14 rounded-2xl border flex items-center justify-center"
+                  style={{ color: 'var(--sm-sky)', borderColor: 'rgba(112,161,215,0.28)', background: 'rgba(112,161,215,0.08)' }}
+                  whileHover={prefersReduced ? {} : { scale: 1.12, rotate: 6 }}
+                  transition={{ duration: 0.28, ease: [0.34, 1.56, 0.64, 1] as const }}
+                >
+                  <Globe className="w-7 h-7" />
+                </motion.div>
+                <div>
+                  <h3 className="font-display font-bold text-2xl mb-3" style={{ color: 'var(--sm-slate)' }}>
+                    Páginas Web para PYMEs
+                  </h3>
+                  <p className="text-sm leading-relaxed max-w-lg" style={{ color: 'var(--sm-slate-mid)' }}>
+                    Plataformas optimizadas para Google y móviles. Atraen clientes de tu zona geográfica en Santiago de forma fluida y profesional. Código Next.js estático = velocidad máxima.
+                  </p>
                 </div>
-                <div className="pt-5 flex items-center justify-between relative z-10" style={{ borderTop: '1px solid rgba(112,161,215,0.14)' }}>
-                  <span className="font-mono text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--sm-sky)' }}>
-                    {service.badge}
-                  </span>
-                  <ChevronRight className="w-4 h-4" style={{ color: 'rgba(30,41,59,0.3)' }} />
+              </div>
+              <div className="pt-5 flex items-center justify-between relative z-10" style={{ borderTop: '1px solid rgba(112,161,215,0.14)' }}>
+                <span className="font-mono text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--sm-sky)' }}>
+                  Velocidad + SEO Local
+                </span>
+                <MagneticButton href="#contacto" variant="secondary" className="px-4 py-2 text-[9px]">
+                  Cotizar
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </MagneticButton>
+              </div>
+            </SpotlightCard>
+          </StaggerItem>
+
+          {/* Card 2 */}
+          <StaggerItem from="right">
+            <SpotlightCard className="p-8 flex flex-col justify-between min-h-[380px] relative">
+              <span className="section-num-deco text-[120px] absolute -top-4 -right-3 leading-none" aria-hidden="true">02</span>
+              <div className="space-y-5 relative z-10">
+                <motion.div
+                  className="w-12 h-12 rounded-2xl border flex items-center justify-center"
+                  style={{ color: 'var(--sm-sky)', borderColor: 'rgba(112,161,215,0.28)', background: 'rgba(112,161,215,0.08)' }}
+                  whileHover={prefersReduced ? {} : { scale: 1.10, rotate: -5 }}
+                  transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] as const }}
+                >
+                  <Smartphone className="w-6 h-6" />
+                </motion.div>
+                <div>
+                  <h3 className="font-display font-bold text-lg mb-2" style={{ color: 'var(--sm-slate)' }}>
+                    Menús y Catálogos Digitales
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--sm-slate-mid)' }}>
+                    Catálogos sin comisiones de terceros. Recibe solicitudes detalladas con montos CLP en tu WhatsApp.
+                  </p>
                 </div>
-              </SpotlightCard>
-            </StaggerItem>
-          ))}
+              </div>
+              <div className="pt-5 flex items-center justify-between relative z-10" style={{ borderTop: '1px solid rgba(112,161,215,0.14)' }}>
+                <span className="font-mono text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--sm-sky)' }}>
+                  Precios CLP + WhatsApp
+                </span>
+                <ChevronRight className="w-4 h-4" style={{ color: 'rgba(30,41,59,0.3)' }} />
+              </div>
+            </SpotlightCard>
+          </StaggerItem>
+
+          {/* Card 3 — Full width bottom */}
+          <StaggerItem className="md:col-span-3" from="bottom">
+            <SpotlightCard className="p-8 lg:p-10 flex flex-col md:flex-row items-start gap-8 relative">
+              <span className="section-num-deco text-[140px] absolute -bottom-8 -left-4 leading-none" aria-hidden="true">03</span>
+              <div className="flex-1 space-y-4 relative z-10">
+                <motion.div
+                  className="w-12 h-12 rounded-2xl border flex items-center justify-center"
+                  style={{ color: 'var(--sm-sky)', borderColor: 'rgba(112,161,215,0.28)', background: 'rgba(112,161,215,0.08)' }}
+                  whileHover={prefersReduced ? {} : { scale: 1.10, rotate: 4 }}
+                  transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] as const }}
+                >
+                  <ShoppingBag className="w-6 h-6" />
+                </motion.div>
+                <div>
+                  <h3 className="font-display font-bold text-xl mb-2" style={{ color: 'var(--sm-slate)' }}>
+                    Distribución y Venta Online
+                  </h3>
+                  <p className="text-sm leading-relaxed max-w-2xl" style={{ color: 'var(--sm-slate-mid)' }}>
+                    Sistemas simples para distribuidoras y locales. Recopilación ágil de leads y catálogo de inventarios para clientes recurrentes.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col items-start gap-3 relative z-10 shrink-0">
+                <StatusBadge color="sage">Automatización de Ventas</StatusBadge>
+                <MagneticButton href="#contacto" variant="primary" className="px-6 py-2.5 text-[9px]">
+                  <Zap className="w-3 h-3" />
+                  Ver Demo
+                </MagneticButton>
+              </div>
+            </SpotlightCard>
+          </StaggerItem>
         </StaggerReveal>
       </section>
 
       {/* ══════════════════════════════════════════════════════
           SECTION 4: PROCESO — Sticky Scroll Storytelling
           ══════════════════════════════════════════════════════ */}
-      <section id="proceso" className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
-        <SectionReveal className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+      <section id="proceso" className="py-24 px-4 md:px-8 max-w-7xl mx-auto relative">
+        <FloatingOrbs palette="sky" intensity="low" />
+
+        <SectionReveal className="text-center max-w-2xl mx-auto mb-16 space-y-3 relative z-10" from="fade">
           <StatusBadge color="sky">
             <Compass className="w-3 h-3 inline-block mr-1" />
             Metodología Ágil
           </StatusBadge>
-          <h2 className="font-display font-bold text-3xl md:text-4xl" style={{ color: 'var(--sm-slate)' }}>
+          <h2 className="font-display font-black text-3xl md:text-4xl" style={{ color: 'var(--sm-slate)' }}>
             Proceso: Conexión → Creación → Lanzamiento
           </h2>
           <p className="text-sm" style={{ color: 'var(--sm-slate-mid)' }}>
             Desplázate para ver cómo construimos tu red digital.
           </p>
         </SectionReveal>
-        <ProcesosSection />
+
+        <div className="relative z-10">
+          <ProcesosSection />
+        </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════
           SECTION 5: QUIÉNES SOMOS
           ══════════════════════════════════════════════════════ */}
-      <section id="nosotros" className="py-20 px-4 md:px-8 max-w-7xl mx-auto" style={{ background: 'var(--sm-bg-alt)' }}>
-        <SectionReveal className="text-center max-w-2xl mx-auto mb-12 space-y-3">
+      <section
+        id="nosotros"
+        className="py-24 px-4 md:px-8 max-w-7xl mx-auto"
+        style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(245,244,240,0.6) 20%, rgba(245,244,240,0.6) 80%, transparent 100%)' }}
+      >
+        <SectionReveal className="text-center max-w-2xl mx-auto mb-14 space-y-3" from="scale">
           <StatusBadge color="sky">
             <Users className="w-3 h-3 inline-block mr-1" />
             Socios Estratégicos
           </StatusBadge>
-          <h2 className="font-display font-bold text-3xl md:text-4xl" style={{ color: 'var(--sm-slate)' }}>
+          <h2 className="font-display font-black text-3xl md:text-4xl" style={{ color: 'var(--sm-slate)' }}>
             El Equipo Detrás de S&M
           </h2>
+          <p className="text-sm" style={{ color: 'var(--sm-slate-mid)' }}>
+            Dos especialistas. Una visión. Resultados concretos para tu negocio.
+          </p>
         </SectionReveal>
 
         <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -872,30 +1055,41 @@ export default function Page() {
               role: 'Liderazgo Comercial & Gestión',
               desc: 'Enfocado en relaciones comerciales empáticas, atención personalizada y presupuestos realistas sin sobrecostos para PYMEs.',
               badgeColor: 'sky' as const,
+              iconColor: 'rgba(112,161,215,0.12)',
             },
             {
               initials: 'JU', name: 'Jeshua Useche',
               role: 'Desarrollo Fullstack & UI/UX',
               desc: 'Transforma los requerimientos del cliente en código limpio, rápido y escalable en Next.js y React con estándares UI/UX modernos.',
               badgeColor: 'lavender' as const,
+              iconColor: 'rgba(224,195,252,0.18)',
             },
-          ].map((member) => (
-            <StaggerItem key={member.name}>
+          ].map((member, idx) => (
+            <StaggerItem key={member.name} from={idx === 0 ? 'left' : 'right'}>
               <SpotlightCard className="p-8 flex flex-col sm:flex-row items-start gap-6">
-                {/* Avatar — circular glass frame, sky border */}
-                <motion.div
-                  className="border-sky-lavender shrink-0 w-14 h-14 rounded-full flex items-center justify-center font-bold text-lg relative z-10"
-                  style={{
-                    background: 'rgba(112,161,215,0.10)',
-                    color: 'var(--sm-slate)',
-                    fontFamily: 'var(--font-display)',
-                  }}
-                  whileHover={prefersReduced ? {} : { scale: 1.08, rotate: -3 }}
-                  transition={{ duration: 0.28, ease: [0.34, 1.56, 0.64, 1] as const }}
-                >
-                  {member.initials}
-                </motion.div>
-                <div className="space-y-2 relative z-10">
+                {/* Avatar with animated ring */}
+                <div className="relative shrink-0">
+                  <motion.div
+                    className="border-sky-lavender w-16 h-16 rounded-full flex items-center justify-center font-black text-xl relative z-10"
+                    style={{
+                      background: member.iconColor,
+                      color: 'var(--sm-slate)',
+                      fontFamily: 'var(--font-display)',
+                    }}
+                    whileHover={prefersReduced ? {} : { scale: 1.1, rotate: -4 }}
+                    transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as const }}
+                  >
+                    {member.initials}
+                  </motion.div>
+                  {/* Pulsing ring */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full border-2 border-[rgba(112,161,215,0.3)]"
+                    animate={prefersReduced ? {} : { scale: [1, 1.22, 1], opacity: [0.7, 0, 0.7] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="space-y-2.5 relative z-10">
                   <div>
                     <h4 className="font-display font-bold text-base" style={{ color: 'var(--sm-slate)' }}>
                       {member.name}
@@ -903,6 +1097,24 @@ export default function Page() {
                     <StatusBadge color={member.badgeColor} className="mt-1.5">{member.role}</StatusBadge>
                   </div>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--sm-slate-mid)' }}>{member.desc}</p>
+
+                  {/* Contact pill */}
+                  <div className="flex items-center gap-2 pt-1">
+                    <a
+                      href="#contacto"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-medium transition-all duration-200 hover:shadow-sm"
+                      style={{
+                        background: 'rgba(112,161,215,0.10)',
+                        border: '1px solid rgba(112,161,215,0.24)',
+                        color: 'var(--sm-sky)',
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(112,161,215,0.18)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(112,161,215,0.10)'; }}
+                    >
+                      <MessageCircle className="w-3 h-3" />
+                      Contactar
+                    </a>
+                  </div>
                 </div>
               </SpotlightCard>
             </StaggerItem>
@@ -913,24 +1125,72 @@ export default function Page() {
       {/* ══════════════════════════════════════════════════════
           SECTION 6: CONTACTO
           ══════════════════════════════════════════════════════ */}
-      <section id="contacto" className="py-20 px-4 md:px-8 max-w-4xl mx-auto">
-        <SectionReveal>
+      <section id="contacto" className="py-24 px-4 md:px-8 max-w-4xl mx-auto relative">
+        <FloatingOrbs palette="lavender" intensity="low" />
+
+        <SectionReveal className="relative z-10" from="scale">
           <GlassSurface variant="strong" className="p-8 lg:p-12 relative overflow-hidden">
             {/* Sky glow behind form */}
             <div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[180px] pointer-events-none"
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[200px] pointer-events-none"
               style={{ background: 'radial-gradient(ellipse at center, rgba(142,197,252,0.12) 0%, transparent 70%)' }}
               aria-hidden="true"
             />
 
             <div className="text-center space-y-3 mb-10 relative z-10">
-              <StatusBadge color="sky" className="mb-3">Contacto Directo</StatusBadge>
-              <h3 className="font-display font-bold text-2xl md:text-3xl leading-tight" style={{ color: 'var(--sm-slate)' }}>
-                ¿Listo para darle a tu negocio la visibilidad que merece?
-              </h3>
+              <StatusBadge color="sky" shimmer className="mb-3">Contacto Directo</StatusBadge>
+              <h2 className="font-display font-black text-2xl md:text-3xl leading-tight" style={{ color: 'var(--sm-slate)' }}>
+                ¿Listo para darle a tu negocio<br className="hidden md:block" />
+                {' '}la visibilidad que merece?
+              </h2>
               <p className="text-sm" style={{ color: 'var(--sm-slate-mid)' }}>
                 Completa el formulario y nos contactaremos a tu WhatsApp para coordinar tu propuesta.
               </p>
+            </div>
+
+            {/* WhatsApp direct CTA */}
+            <div
+              className="relative z-10 mb-8 p-4 rounded-2xl flex items-center justify-between gap-4"
+              style={{
+                background: 'rgba(168,218,220,0.18)',
+                border: '1px solid rgba(168,218,220,0.45)',
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: '#25D366', color: 'white' }}
+                >
+                  <MessageCircle className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold" style={{ color: 'var(--sm-slate)' }}>¿Prefieres hablar ahora?</p>
+                  <p className="text-[10px]" style={{ color: 'var(--sm-slate-mid)' }}>Escríbenos directamente al WhatsApp comercial</p>
+                </div>
+              </div>
+              <a
+                href="https://wa.me/56912345678?text=Hola%20S%26M%20Network%2C%20me%20interesa%20una%20asesor%C3%ADa%20gratuita"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 px-4 py-2 rounded-xl font-mono text-[9px] font-black uppercase tracking-wider transition-all duration-200"
+                style={{
+                  background: '#25D366',
+                  color: 'white',
+                  boxShadow: '0 4px 14px rgba(37,211,102,0.28)',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(37,211,102,0.42)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 4px 14px rgba(37,211,102,0.28)'; }}
+              >
+                Ir al WhatsApp
+              </a>
+            </div>
+
+            <div className="relative z-10 flex items-center gap-4 mb-8">
+              <div className="h-px flex-1" style={{ background: 'rgba(112,161,215,0.2)' }} />
+              <span className="font-mono text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--sm-slate-mid)' }}>
+                O completa el formulario
+              </span>
+              <div className="h-px flex-1" style={{ background: 'rgba(112,161,215,0.2)' }} />
             </div>
 
             <AnimatePresence mode="wait">
@@ -947,16 +1207,16 @@ export default function Page() {
                     initial={prefersReduced ? {} : { scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ ...spring, delay: 0.1 }}
-                    className="w-14 h-14 rounded-full flex items-center justify-center mx-auto border"
+                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto border"
                     style={{
                       background: 'rgba(112,161,215,0.10)',
                       borderColor: 'rgba(112,161,215,0.28)',
                       color: 'var(--sm-sky)',
                     }}
                   >
-                    <CheckCircle2 className="w-7 h-7" />
+                    <CheckCircle2 className="w-8 h-8" />
                   </motion.div>
-                  <h4 className="font-display font-bold text-lg" style={{ color: 'var(--sm-slate)' }}>
+                  <h4 className="font-display font-bold text-xl" style={{ color: 'var(--sm-slate)' }}>
                     ¡Mensaje Enviado con Éxito!
                   </h4>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--sm-slate-mid)' }}>
@@ -964,16 +1224,39 @@ export default function Page() {
                   </p>
                 </motion.div>
               ) : (
-                <form key="form" onSubmit={handleSubmit} className="space-y-5 relative z-10">
-                  <FloatInput id="name" label="Nombre Completo" value={nameVal} onChange={setNameVal} required />
-                  <FloatInput id="businessName" label="Nombre del Negocio" value={bizVal} onChange={setBizVal} required />
-                  <FloatInput id="whatsapp" label="numero de whatsapp" type="tel" value={waVal} onChange={setWaVal} required />
+                <form key="form" onSubmit={handleSubmit} className="space-y-4 relative z-10">
+                  <GlassInput
+                    label="Nombre Completo"
+                    value={nameVal}
+                    onChange={setNameVal}
+                    required
+                    icon={<Users className="w-4 h-4" />}
+                  />
+                  <GlassInput
+                    label="Nombre del Negocio"
+                    value={bizVal}
+                    onChange={setBizVal}
+                    required
+                    icon={<ShoppingBag className="w-4 h-4" />}
+                  />
+                  <GlassInput
+                    label="Número de WhatsApp"
+                    type="tel"
+                    value={waVal}
+                    onChange={setWaVal}
+                    required
+                    icon={<Phone className="w-4 h-4" />}
+                  />
 
                   {formStatus === 'error' && (
-                    <p className="text-xs font-semibold p-3 rounded-xl border"
-                      style={{ color: '#DC2626', background: 'rgba(239,68,68,0.05)', borderColor: 'rgba(239,68,68,0.15)' }}>
+                    <motion.p
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-xs font-semibold p-3 rounded-xl border"
+                      style={{ color: '#DC2626', background: 'rgba(239,68,68,0.05)', borderColor: 'rgba(239,68,68,0.18)' }}
+                    >
                       Por favor rellena todos los campos correctamente.
-                    </p>
+                    </motion.p>
                   )}
 
                   <MagneticButton type="submit" variant="primary" disabled={formStatus === 'loading'} className="w-full py-4 text-xs">
@@ -1007,35 +1290,87 @@ export default function Page() {
                 <span style={{ color: 'var(--sm-lavender)' }}>·</span>
                 <span>Next.js + WhatsApp</span>
                 <span style={{ color: 'var(--sm-lavender)' }}>·</span>
+                <span>Santiago, Chile 🇨🇱</span>
+                <span style={{ color: 'var(--sm-sage)' }}>·</span>
               </span>
             ))}
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div
-              className="px-2 py-1 rounded-xl flex items-center justify-center shadow-sm border"
-              style={{
-                background: 'rgba(255, 255, 255, 0.85)',
-                borderColor: 'rgba(112, 161, 215, 0.35)',
-              }}
-            >
-              <LogoIsotype className="w-7 h-4.5" />
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            {/* Brand */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div
+                  className="px-2 py-1 rounded-xl flex items-center justify-center shadow-sm border"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    borderColor: 'rgba(112, 161, 215, 0.35)',
+                  }}
+                >
+                  <LogoIsotype className="w-7 h-4.5" />
+                </div>
+                <div>
+                  <span className="block font-display font-bold text-xs leading-none" style={{ color: 'var(--sm-slate)' }}>S&M Network</span>
+                  <span className="block font-mono text-[7px] font-bold uppercase tracking-[0.14em]" style={{ color: 'var(--sm-sky)' }}>Company</span>
+                </div>
+              </div>
+              <p className="text-xs leading-relaxed" style={{ color: 'rgba(30,41,59,0.5)' }}>
+                Impulsando el crecimiento digital de PYMEs en Santiago, Chile con tecnología de punta y trato cercano.
+              </p>
+              <div className="flex items-center gap-1.5">
+                <MapPin className="w-3 h-3" style={{ color: 'var(--sm-sky)' }} />
+                <span className="font-mono text-[9px]" style={{ color: 'rgba(30,41,59,0.45)' }}>Santiago, Chile</span>
+              </div>
             </div>
-            <div>
-              <span className="block font-display font-bold text-xs leading-none" style={{ color: 'var(--sm-slate)' }}>S&M Network</span>
-              <span className="block font-mono text-[7px] font-bold uppercase tracking-[0.14em]" style={{ color: 'var(--sm-sky)' }}>Company</span>
+
+            {/* Services */}
+            <div className="space-y-2.5">
+              <p className="font-mono text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--sm-sky)' }}>Servicios</p>
+              {['Páginas Web para PYMEs', 'Menús Digitales', 'Catálogos WhatsApp', 'Venta Online'].map((s) => (
+                <a
+                  key={s}
+                  href="#servicios"
+                  className="flex items-center gap-1.5 text-xs transition-colors duration-200 group"
+                  style={{ color: 'rgba(30,41,59,0.5)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--sm-slate)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(30,41,59,0.5)'; }}
+                >
+                  <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" style={{ color: 'var(--sm-sky)' }} />
+                  {s}
+                </a>
+              ))}
+            </div>
+
+            {/* Navigation */}
+            <div className="space-y-2.5">
+              <p className="font-mono text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--sm-sky)' }}>Navegación</p>
+              {['Servicios', 'Proceso', 'Nosotros', 'Contacto'].map((s) => (
+                <a
+                  key={s}
+                  href={`#${s.toLowerCase()}`}
+                  className="flex items-center gap-1.5 text-xs transition-colors duration-200 group"
+                  style={{ color: 'rgba(30,41,59,0.5)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--sm-slate)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(30,41,59,0.5)'; }}
+                >
+                  <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" style={{ color: 'var(--sm-sky)' }} />
+                  {s}
+                </a>
+              ))}
             </div>
           </div>
 
-          <p className="font-mono text-[9px] uppercase tracking-wider text-center" style={{ color: 'rgba(30,41,59,0.4)' }}>
-            © {new Date().getFullYear()} S&M Network Company. Todos los derechos reservados. Santiago, Chile.
-          </p>
-
-          <div className="flex items-center gap-2 font-mono text-[9px]" style={{ color: 'rgba(30,41,59,0.4)' }}>
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--sm-sage)' }} />
-            Sin cobros mensuales. Código propio.
+          {/* Bottom bar */}
+          <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid rgba(112,161,215,0.12)' }}>
+            <p className="font-mono text-[9px] uppercase tracking-wider" style={{ color: 'rgba(30,41,59,0.4)' }}>
+              © {new Date().getFullYear()} S&M Network Company. Todos los derechos reservados.
+            </p>
+            <div className="flex items-center gap-2 font-mono text-[9px]" style={{ color: 'rgba(30,41,59,0.4)' }}>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--sm-sage)' }} />
+              Sin cobros mensuales · Código propio · Hecho con 💙 en Santiago
+            </div>
           </div>
         </div>
       </footer>
