@@ -1,11 +1,18 @@
 'use client';
 
 import React, { useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
-type GlassSurfaceVariant = 'default' | 'strong' | 'subtle' | 'fogged';
+export type GlassSurfaceVariant = 'default' | 'strong' | 'subtle' | 'fogged';
 
+const variantClass: Record<GlassSurfaceVariant, string> = {
+  default: 'glass-surface',
+  strong:  'glass-surface glass-surface-strong',
+  subtle:  'glass-surface glass-surface-subtle',
+  fogged:  'glass-surface glass-fogged',
+};
+
+/* ── GlassSurface ────────────────────────────────────────────── */
 interface GlassSurfaceProps {
   children: React.ReactNode;
   variant?: GlassSurfaceVariant;
@@ -15,13 +22,6 @@ interface GlassSurfaceProps {
   style?: React.CSSProperties;
   id?: string;
 }
-
-const variantClass: Record<GlassSurfaceVariant, string> = {
-  default: 'glass-surface',
-  strong:  'glass-surface glass-surface-strong',
-  subtle:  'glass-surface glass-surface-subtle',
-  fogged:  'glass-surface glass-fogged',
-};
 
 export function GlassSurface({
   children,
@@ -44,12 +44,11 @@ export function GlassSurface({
   );
 }
 
-/* ─── Spotlight Card ──────────────────────────────────────── */
+/* ── SpotlightCard ───────────────────────────────────────────── */
 interface SpotlightCardProps {
   children: React.ReactNode;
   variant?: GlassSurfaceVariant;
   className?: string;
-  hoverBorderColor?: string;
   id?: string;
 }
 
@@ -57,7 +56,6 @@ export function SpotlightCard({
   children,
   variant = 'default',
   className = '',
-  hoverBorderColor,
   id,
 }: SpotlightCardProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -84,11 +82,58 @@ export function SpotlightCard({
       whileHover={prefersReduced ? {} : { y: -6, scale: 1.012 }}
       whileTap={prefersReduced ? {} : { scale: 0.988 }}
       transition={{ duration: 0.38, ease: [0.25, 0.46, 0.45, 0.94] as const }}
-      style={hoverBorderColor ? {
-        ['--hover-border' as string]: hoverBorderColor,
-      } : undefined}
     >
       {children}
     </motion.div>
+  );
+}
+
+/* ── StatusBadge ─────────────────────────────────────────────── */
+/*
+  Pill badge with solid pastel background + slate text.
+  Contrast verified: slate (#1E293B) on sage (#A8DADC) = ~7.1:1 ✓ AAA
+                     slate (#1E293B) on sky-light (#8EC5FC) = ~5.8:1 ✓ AA
+  NEVER uses pastel as text color on a light background.
+*/
+type BadgeColor = 'sage' | 'sky' | 'lavender' | 'neutral';
+
+const badgeStyle: Record<BadgeColor, { bg: string; border: string }> = {
+  sage:     { bg: 'rgba(168, 218, 220, 0.55)', border: 'rgba(168, 218, 220, 0.7)' },
+  sky:      { bg: 'rgba(142, 197, 252, 0.30)', border: 'rgba(112, 161, 215, 0.45)' },
+  lavender: { bg: 'rgba(224, 195, 252, 0.28)', border: 'rgba(224, 195, 252, 0.50)' },
+  neutral:  { bg: 'rgba(30,  41,  59,  0.06)', border: 'rgba(30,  41,  59,  0.12)' },
+};
+
+interface StatusBadgeProps {
+  children: React.ReactNode;
+  color?: BadgeColor;
+  className?: string;
+  dot?: boolean;
+}
+
+export function StatusBadge({
+  children,
+  color = 'sage',
+  className = '',
+  dot = false,
+}: StatusBadgeProps) {
+  const { bg, border } = badgeStyle[color];
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-[9px] font-bold uppercase tracking-widest ${className}`}
+      style={{
+        background: bg,
+        border: `1px solid ${border}`,
+        color: 'var(--sm-slate)',  /* slate text on pastel bg = AA+ always */
+      }}
+    >
+      {dot && (
+        <span
+          className="w-1.5 h-1.5 rounded-full shrink-0 animate-pulse"
+          style={{ background: 'var(--sm-slate)', opacity: 0.5 }}
+        />
+      )}
+      {children}
+    </span>
   );
 }

@@ -3,6 +3,15 @@
 import React, { useRef, useCallback, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
+/*
+  CONTRAST VERIFICATION (Section 3 of spec):
+  Primary CTA: --sm-sky (#70A1D7) background + --sm-slate (#1E293B) text
+  Contrast ratio: ~5.4:1 → passes WCAG AA (≥4.5:1 for normal text) ✓
+
+  Secondary: glass-surface-subtle bg + --sm-slate text
+  Contrast ratio: >>7:1 (white/near-white bg) → passes AAA ✓
+*/
+
 interface MagneticButtonProps {
   children: React.ReactNode;
   href?: string;
@@ -24,7 +33,7 @@ export function MagneticButton({
   variant = 'secondary',
   className = '',
   radius = 44,
-  strength = 0.34,
+  strength = 0.32,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLElement>(null);
   const prefersReduced = useReducedMotion();
@@ -47,21 +56,28 @@ export function MagneticButton({
     [prefersReduced, isTouch, radius, strength]
   );
 
-  const handleMouseLeave = useCallback(() => {
-    setOffset({ x: 0, y: 0 });
-  }, []);
+  const handleMouseLeave = useCallback(() => setOffset({ x: 0, y: 0 }), []);
+  const handleTouchStart = useCallback(() => setIsTouch(true), []);
 
-  const handleTouchStart = useCallback(() => {
-    setIsTouch(true);
-  }, []);
+  // Primary: #70A1D7 bg + #1E293B text = 5.4:1, passes AA ✓
+  const primaryStyle = [
+    'glass-cta-btn',
+    'font-medium',
+    'border border-[rgba(112,161,215,0.5)]',
+    'shadow-[0_4px_18px_rgba(112,161,215,0.30)]',
+    'hover:shadow-[0_8px_32px_rgba(112,161,215,0.42)]',
+    'hover:bg-[#5F90C5]',
+    'active:bg-[#5483B8]',
+  ].join(' ');
 
-  const primaryStyle =
-    'bg-[#2FE6A6] text-[#0B0F14] font-black border border-[rgba(47,230,166,0.4)] shadow-[0_4px_20px_rgba(47,230,166,0.28)] hover:shadow-[0_8px_36px_rgba(47,230,166,0.42)] hover:bg-[#4ef5b8]';
+  const secondaryStyle = [
+    'glass-surface glass-surface-subtle',
+    'font-medium',
+    'hover:border-[rgba(112,161,215,0.55)]',
+    'hover:shadow-[0_4px_16px_rgba(112,161,215,0.14)]',
+  ].join(' ');
 
-  const secondaryStyle =
-    'glass-surface glass-surface-subtle text-[#F3F5F4] hover:border-[rgba(255,255,255,0.22)]';
-
-  const baseClass = `glass-cta-btn relative inline-flex items-center justify-center gap-2 rounded-full text-xs font-black uppercase tracking-wider transition-[box-shadow,background-color,border-color] select-none cursor-pointer focus-visible:outline-2 focus-visible:outline-[#2FE6A6] focus-visible:outline-offset-3 ${
+  const baseClass = `relative inline-flex items-center justify-center gap-2 rounded-full text-xs uppercase tracking-wider transition-[box-shadow,background-color,border-color] select-none cursor-pointer focus-visible:outline-2 focus-visible:outline-[#70A1D7] focus-visible:outline-offset-3 ${
     variant === 'primary' ? primaryStyle : secondaryStyle
   } ${disabled ? 'opacity-50 pointer-events-none' : ''} ${className}`;
 
@@ -69,13 +85,17 @@ export function MagneticButton({
     ? {}
     : {
         animate: { x: offset.x, y: offset.y },
-        whileTap: { scale: 0.96 },
+        whileTap: { scale: 0.97 },
         transition: {
           type: 'spring' as const,
           stiffness: 300,
           damping: 22,
         },
       };
+
+  const primaryInlineStyle = variant === 'primary'
+    ? { background: 'var(--sm-sky)', color: 'var(--sm-slate)' }
+    : { color: 'var(--sm-slate)' };
 
   if (href) {
     return (
@@ -84,6 +104,7 @@ export function MagneticButton({
         href={href}
         onClick={onClick}
         className={baseClass}
+        style={primaryInlineStyle}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onTouchStart={handleTouchStart}
@@ -101,6 +122,7 @@ export function MagneticButton({
       disabled={disabled}
       onClick={onClick}
       className={baseClass}
+      style={primaryInlineStyle}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onTouchStart={handleTouchStart}
@@ -110,5 +132,3 @@ export function MagneticButton({
     </motion.button>
   );
 }
-
-/* Glass CTA shine class is in globals.css as .glass-cta-btn */
