@@ -1,58 +1,65 @@
 @import "tailwindcss";
 
 /* ============================================================
-   S&M NETWORK COMPANY — LIQUID GLASS DESIGN SYSTEM
-   iOS / Apple-Inspired Glassmorphism Tokens & Utilities
+   S&M NETWORK COMPANY — LIQUID GLASS DESIGN SYSTEM v2
+   "Grafito Nocturno" — Dark-base, glass-material identity
    ============================================================ */
 
-/* --- Base CSS Variables --- */
+/* ── STEP 1: CSS Custom Properties (Design Tokens) ─────────── */
 :root {
-  /* Background */
-  --bg-base: #FDFBF7;
-  --bg-dark: #0A0F1E;
+  /* Base surfaces */
+  --sm-bg:           #0B0F14;
+  --sm-bg-elevated:  #10151C;
 
-  /* Glass surfaces — light */
-  --glass-bg-light: rgba(255, 255, 255, 0.65);
-  --glass-bg-light-hover: rgba(255, 255, 255, 0.82);
-  --glass-border-light: rgba(255, 255, 255, 0.55);
-  --glass-border-light-hover: rgba(255, 255, 255, 0.75);
+  /* Brand accents */
+  --sm-emerald: #2FE6A6;
+  --sm-blue:    #4A7CFB;
+  --sm-bone:    #F3F5F4;
+  --sm-coral:   #FF6B57;
 
-  /* Glass surfaces — dark */
-  --glass-bg-dark: rgba(15, 23, 42, 0.72);
-  --glass-border-dark: rgba(255, 255, 255, 0.08);
-  --glass-border-dark-hover: rgba(255, 255, 255, 0.16);
+  /* Glass material recipe */
+  --sm-glass-fill:        rgba(255, 255, 255, 0.055);
+  --sm-glass-fill-strong: rgba(255, 255, 255, 0.11);
+  --sm-glass-fill-subtle: rgba(255, 255, 255, 0.028);
+  --sm-glass-border:      rgba(255, 255, 255, 0.13);
+  --sm-glass-border-hi:   rgba(255, 255, 255, 0.22);
+  --sm-glass-blur:        20px;
+  --sm-glass-saturate:    180%;
 
-  /* Specular inner shadow */
-  --glass-specular: inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
+  /* Shadows */
+  --sm-shadow-xs: 0 4px 12px  rgba(0, 0, 0, 0.28);
+  --sm-shadow-sm: 0 8px 24px  rgba(0, 0, 0, 0.34);
+  --sm-shadow-md: 0 16px 48px rgba(0, 0, 0, 0.42);
+  --sm-shadow-lg: 0 32px 80px rgba(0, 0, 0, 0.54);
 
-  /* Outer drop shadow */
-  --glass-shadow-sm: 0 4px 24px -4px rgba(0, 0, 0, 0.06);
-  --glass-shadow-md: 0 20px 48px -12px rgba(0, 0, 0, 0.14);
-  --glass-shadow-lg: 0 32px 64px -16px rgba(0, 0, 0, 0.22);
+  /* Emerald glow */
+  --sm-glow-em:   0 0 32px rgba(47, 230, 166, 0.28);
+  --sm-glow-em-sm: 0 0 12px rgba(47, 230, 166, 0.20);
+  --sm-glow-bl:   0 0 32px rgba(74, 124, 251, 0.22);
 
-  /* Accents */
-  --accent-emerald: #10B981;
-  --accent-cyan: #06B6D4;
-  --accent-violet: #8B5CF6;
+  /* Motion easing + durations */
+  --ease-liquid: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --dur-fast:   160ms;
+  --dur-base:   400ms;
+  --dur-slow:   860ms;
 
-  /* Typography */
-  --text-primary: #1C1917;
-  --text-muted: #737373;
-  --text-dark-primary: #F8FAFC;
-  --text-dark-muted: #94A3B8;
+  /* Typography scales */
+  --font-display: var(--font-space-grotesk), 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    var(--font-geist-sans), 'Geist', system-ui, sans-serif;
+  --font-mono:    var(--font-geist-mono), 'Geist Mono', 'Fira Code', monospace;
 
-  /* Backdrop blur levels */
-  --blur-sm: blur(12px) saturate(160%);
-  --blur-md: blur(24px) saturate(190%);
-  --blur-lg: blur(40px) saturate(200%);
+  /* Chromatic border — used on hero device frame */
+  --border-chromatic: linear-gradient(135deg,
+    rgba(139, 92, 246, 0.7) 0%,
+    rgba(74, 124, 251, 0.6) 35%,
+    rgba(47, 230, 166, 0.7) 100%
+  );
 }
 
-/* --- Global Resets & Smooth Scroll --- */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+/* ── STEP 2: Global Resets ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
@@ -62,223 +69,359 @@ html {
 }
 
 body {
-  background: var(--bg-base);
-  color: var(--text-primary);
+  background-color: var(--sm-bg);
+  color: var(--sm-bone);
+  font-family: var(--font-body);
   overflow-x: hidden;
 }
 
-/* --- Custom Scrollbar (Webkit) --- */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
-  border-radius: 99px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.22);
-}
-
-/* --- Selection Color --- */
-::selection {
-  background: rgba(16, 185, 129, 0.18);
-  color: #065f46;
+/* ── STEP 3: Tailwind v4 Theme Registration ─────────────────── */
+@theme inline {
+  /* Colors */
+  --color-sm-bg:           #0B0F14;
+  --color-sm-bg-elevated:  #10151C;
+  --color-sm-emerald:      #2FE6A6;
+  --color-sm-blue:         #4A7CFB;
+  --color-sm-bone:         #F3F5F4;
+  --color-sm-coral:        #FF6B57;
+  /* Fonts */
+  --font-sans:    var(--font-geist-sans);
+  --font-mono:    var(--font-geist-mono);
+  --font-display: var(--font-space-grotesk);
 }
 
-/* ============================================================
-   LIQUID GLASS UTILITY CLASSES
-   ============================================================ */
+/* ── STEP 4: Glass Surface Utility ─────────────────────────── */
 
-/* Light Glass Card */
-.glass-card {
-  background: var(--glass-bg-light);
-  border: 1px solid var(--glass-border-light);
-  box-shadow: var(--glass-specular), var(--glass-shadow-sm);
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
+.glass-surface {
+  background: linear-gradient(
+    180deg,
+    var(--sm-glass-fill-strong),
+    var(--sm-glass-fill)
+  );
+  backdrop-filter: blur(var(--sm-glass-blur)) saturate(var(--sm-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--sm-glass-blur)) saturate(var(--sm-glass-saturate));
+  border: 1px solid var(--sm-glass-border);
+  border-radius: 24px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    var(--sm-shadow-sm);
+  position: relative;
+  overflow: hidden;
   isolation: isolate;
-  will-change: transform, opacity;
-  transform: translate3d(0, 0, 0);
-  transition:
-    transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    border-color 0.25s ease;
 }
 
-.glass-card:hover {
-  background: var(--glass-bg-light-hover);
-  border-color: var(--glass-border-light-hover);
-  box-shadow: var(--glass-specular), var(--glass-shadow-md);
+/* Specular sweep on hover */
+.glass-surface::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.16) 46%,
+    transparent 62%
+  );
+  transform: translateX(-130%);
+  transition: transform var(--dur-slow) var(--ease-liquid);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+.glass-surface:hover::before { transform: translateX(130%); }
+
+/* Strong variant */
+.glass-surface-strong {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.08)
+  );
+  border-color: var(--sm-glass-border-hi);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    var(--sm-shadow-md);
 }
 
-/* Dark Glass Card */
-.glass-card-dark {
-  background: var(--glass-bg-dark);
-  border: 1px solid var(--glass-border-dark);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), var(--glass-shadow-md);
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
-  isolation: isolate;
-  will-change: transform, opacity;
-  transform: translate3d(0, 0, 0);
-  transition:
-    transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    border-color 0.25s ease;
+/* Subtle variant */
+.glass-surface-subtle {
+  background: var(--sm-glass-fill-subtle);
+  border-color: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), var(--sm-shadow-xs);
 }
 
-.glass-card-dark:hover {
-  border-color: var(--glass-border-dark-hover);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), var(--glass-shadow-lg);
+/* @supports fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-surface,
+  .glass-surface-strong,
+  .glass-surface-subtle {
+    background: rgba(14, 19, 27, 0.94);
+  }
 }
 
-/* Specular pointer-tracking light overlay */
-.glass-specular-overlay::after {
+/* ── STEP 5: Spotlight Card (cursor radial glow) ────────────── */
+.spotlight-card {
+  --x: 50%;
+  --y: 50%;
+  position: relative;
+}
+.spotlight-card::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   background: radial-gradient(
-    600px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.12),
-    transparent 55%
+    400px circle at var(--x) var(--y),
+    rgba(47, 230, 166, 0.10),
+    transparent 60%
   );
   pointer-events: none;
   z-index: 1;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--dur-fast) var(--ease-out);
 }
-.glass-specular-overlay:hover::after {
-  opacity: 1;
+.spotlight-card:hover::after { opacity: 1; }
+
+/* ── STEP 6: Chromatic Border (for hero device frame) ────────── */
+.border-chromatic {
+  position: relative;
+}
+.border-chromatic::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--border-chromatic);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
 }
 
-/* ============================================================
-   AMBIENT FLOATING ORB BACKGROUND (CSS-only, GPU-composited)
-   ============================================================ */
+/* ── STEP 7: Liquid Gradient Mesh Background ─────────────────── */
 
-.ambient-orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
+.liquid-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
   pointer-events: none;
   z-index: 0;
 }
 
-.ambient-orb-1 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.18) 0%, transparent 70%);
-  top: -10vh;
-  left: -10vw;
-  animation: floatOrb1 18s ease-in-out infinite alternate;
-}
-
-.ambient-orb-2 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
-  bottom: 10vh;
-  right: -8vw;
-  animation: floatOrb2 22s ease-in-out infinite alternate;
-}
-
-.ambient-orb-3 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.10) 0%, transparent 70%);
-  top: 40vh;
-  left: 40vw;
-  animation: floatOrb3 28s ease-in-out infinite alternate;
-}
-
-@keyframes floatOrb1 {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to   { transform: translate3d(60px, 80px, 0) scale(1.12); }
-}
-
-@keyframes floatOrb2 {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to   { transform: translate3d(-80px, -60px, 0) scale(1.08); }
-}
-
-@keyframes floatOrb3 {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to   { transform: translate3d(40px, -70px, 0) scale(0.92); }
-}
-
-/* ============================================================
-   NAV GLASS PILL SHIMMER (CTA button shine sweep)
-   ============================================================ */
-
-.glass-cta-btn {
-  position: relative;
-  overflow: hidden;
-}
-
-.glass-cta-btn::before {
+.liquid-backdrop::before,
+.liquid-backdrop::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.35) 50%,
-    transparent 60%
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+  animation-timing-function: var(--ease-liquid);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.liquid-backdrop::before {
+  width: 55vw;
+  height: 55vw;
+  max-width: 700px;
+  max-height: 700px;
+  background: radial-gradient(circle,
+    rgba(47, 230, 166, 0.10) 0%,
+    transparent 70%
   );
-  transition: left 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  top: -15%;
+  right: -10%;
+  animation-name: meshDrift1;
+  animation-duration: 38s;
+}
+
+.liquid-backdrop::after {
+  width: 45vw;
+  height: 45vw;
+  max-width: 580px;
+  max-height: 580px;
+  background: radial-gradient(circle,
+    rgba(74, 124, 251, 0.10) 0%,
+    transparent 70%
+  );
+  bottom: -20%;
+  left: -8%;
+  animation-name: meshDrift2;
+  animation-duration: 52s;
+}
+
+@keyframes meshDrift1 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-60px, 80px, 0) scale(1.14); }
+}
+
+@keyframes meshDrift2 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(70px, -50px, 0) scale(1.08); }
+}
+
+/* ── STEP 8: Nav Progress Bar ───────────────────────────────── */
+
+.nav-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--sm-emerald), var(--sm-blue));
+  border-radius: 0 0 99px 99px;
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ── STEP 9: Focus Ring (Accessibility) ─────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--sm-emerald);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── STEP 10: Typography Enhancements ──────────────────────── */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+h3, h4 {
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* ── STEP 11: Scrollbar ─────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(47,230,166,0.35);
+}
+
+/* ── STEP 12: Selection ─────────────────────────────────────── */
+::selection {
+  background: rgba(47, 230, 166, 0.22);
+  color: #f3f5f4;
+}
+
+/* ── STEP 13: Marquee (Footer taglines) ─────────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 28s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── STEP 14: Grain Texture Overlay ─────────────────────────── */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
   pointer-events: none;
+  z-index: 999;
+  opacity: 0.022;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23grain)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
 }
 
-.glass-cta-btn:hover::before {
-  left: 160%;
-}
-
-/* ============================================================
-   REDUCED MOTION — Accessibility Override
-   ============================================================ */
-
+/* ── STEP 15: Reduced Motion Override ───────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-
-  html {
-    scroll-behavior: auto;
-  }
-
-  .ambient-orb {
-    display: none;
-  }
+  html { scroll-behavior: auto; }
+  .glass-surface::before { display: none; }
+  .liquid-backdrop::before,
+  .liquid-backdrop::after { animation: none !important; }
+  .marquee-track { animation: none !important; }
 }
 
-/* ============================================================
-   TYPOGRAPHY ENHANCEMENTS
-   ============================================================ */
+/* ── STEP 16: Count-up / Spring number animation ────────────── */
+@keyframes springPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.22); }
+  70%  { transform: scale(0.93); }
+  100% { transform: scale(1); }
+}
+.spring-pop { animation: springPop 0.38s var(--ease-spring) forwards; }
 
-h1, h2, h3, h4 {
-  letter-spacing: -0.025em;
-  text-wrap: balance;
+/* ── STEP 17: Floating label inputs ─────────────────────────── */
+.float-label-group {
+  position: relative;
+}
+.float-label-group input {
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+.float-label-group label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: rgba(243, 245, 244, 0.45);
+  pointer-events: none;
+  transition:
+    top var(--dur-fast) var(--ease-out),
+    font-size var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+.float-label-group input:focus ~ label,
+.float-label-group input:not(:placeholder-shown) ~ label {
+  top: 0.55rem;
+  font-size: 0.625rem;
+  color: var(--sm-emerald);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.float-label-group input:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 1.5px var(--sm-emerald),
+    var(--sm-glow-em-sm);
 }
 
-/* ============================================================
-   TAILWIND THEME TOKENS
-   ============================================================ */
+/* ── STEP 18: Problem card "fogged" variant ─────────────────── */
+.glass-fogged {
+  backdrop-filter: blur(32px) saturate(80%) grayscale(20%);
+  -webkit-backdrop-filter: blur(32px) saturate(80%) grayscale(20%);
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.04),
+    rgba(255,255,255,0.02)
+  );
+  border-color: rgba(255,255,255,0.07);
+}
+.glass-fogged::before { display: none; } /* no specular sweep on foggy card */
 
-@theme inline {
-  --color-background: var(--bg-base);
-  --color-foreground: var(--text-primary);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Hairline crack SVG overlay for Problem card */
+.crack-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M20 0 L45 80 L35 80 L60 200' stroke='white' stroke-width='0.8' fill='none' stroke-dasharray='4 6'/%3E%3C/svg%3E");
+  border-radius: inherit;
 }
