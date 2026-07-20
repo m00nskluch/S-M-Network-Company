@@ -37,6 +37,7 @@ import {
 import { GlassSurface, SpotlightCard, StatusBadge } from './components/GlassSurface';
 import { MagneticButton } from './components/MagneticButton';
 import { SectionReveal, StaggerReveal, StaggerItem } from './components/SectionReveal';
+import { LogoIsotype } from './components/LogoIsotype';
 
 /* ─── Mock server action ─────────────────────────────────────── */
 async function sendLeadEmail(data: {
@@ -137,17 +138,16 @@ function FloatingNav({ santiagoTime }: { santiagoTime: string }) {
       <ScrollProgressBar />
 
       {/* Logo */}
-      <div className="flex items-center gap-2.5 shrink-0">
+      <div className="flex items-center gap-3 shrink-0">
         <div
-          className="relative w-8 h-8 rounded-full flex items-center justify-center shadow-sm border"
+          className="relative px-2 py-1 rounded-xl flex items-center justify-center shadow-sm border transition-transform duration-300 hover:scale-105"
           style={{
-            background: 'var(--sm-sky)',
-            borderColor: 'rgba(112,161,215,0.4)',
+            background: 'rgba(255, 255, 255, 0.85)',
+            borderColor: 'rgba(112, 161, 215, 0.35)',
+            boxShadow: '0 2px 10px rgba(112, 161, 215, 0.15)',
           }}
         >
-          <span className="font-mono text-[9px] font-black" style={{ color: 'var(--sm-slate)' }}>
-            S&M
-          </span>
+          <LogoIsotype className="w-8 h-5" />
           <span
             className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full border-2 border-white animate-pulse"
             style={{ background: 'var(--sm-sage)' }}
@@ -1015,10 +1015,13 @@ export default function Page() {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center shadow-sm"
-              style={{ background: 'var(--sm-sky)', border: '1px solid rgba(112,161,215,0.4)' }}
+              className="px-2 py-1 rounded-xl flex items-center justify-center shadow-sm border"
+              style={{
+                background: 'rgba(255, 255, 255, 0.85)',
+                borderColor: 'rgba(112, 161, 215, 0.35)',
+              }}
             >
-              <span className="font-mono text-[9px] font-black" style={{ color: 'var(--sm-slate)' }}>S&M</span>
+              <LogoIsotype className="w-7 h-4.5" />
             </div>
             <div>
               <span className="block font-display font-bold text-xs leading-none" style={{ color: 'var(--sm-slate)' }}>S&M Network</span>

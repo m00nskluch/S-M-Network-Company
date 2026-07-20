@@ -29,6 +29,11 @@ export const metadata: Metadata = {
     'S&M Network Company',
     'Next.js Chile',
   ],
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/logo.svg',
+  },
   openGraph: {
     title: 'S&M Network Company | Desarrollo Web para PYMEs en Santiago',
     description:
