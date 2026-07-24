@@ -1148,42 +1148,6 @@ export default function Page() {
               </p>
             </div>
 
-            {/* WhatsApp direct CTA */}
-            <div
-              className="relative z-10 mb-8 p-4 rounded-2xl flex items-center justify-between gap-4"
-              style={{
-                background: 'rgba(168,218,220,0.18)',
-                border: '1px solid rgba(168,218,220,0.45)',
-              }}
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: '#25D366', color: 'white' }}
-                >
-                  <MessageCircle className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold" style={{ color: 'var(--sm-slate)' }}>¿Prefieres hablar ahora?</p>
-                  <p className="text-[10px]" style={{ color: 'var(--sm-slate-mid)' }}>Escríbenos directamente al WhatsApp comercial</p>
-                </div>
-              </div>
-              <a
-                href="https://wa.me/56912345678?text=Hola%20S%26M%20Network%2C%20me%20interesa%20una%20asesor%C3%ADa%20gratuita"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="shrink-0 px-4 py-2 rounded-xl font-mono text-[9px] font-black uppercase tracking-wider transition-all duration-200"
-                style={{
-                  background: '#25D366',
-                  color: 'white',
-                  boxShadow: '0 4px 14px rgba(37,211,102,0.28)',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(37,211,102,0.42)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 4px 14px rgba(37,211,102,0.28)'; }}
-              >
-                Ir al WhatsApp
-              </a>
-            </div>
 
             <div className="relative z-10 flex items-center gap-4 mb-8">
               <div className="h-px flex-1" style={{ background: 'rgba(112,161,215,0.2)' }} />
