@@ -63,9 +63,9 @@ export function MagneticButton({
   const primaryStyle = [
     'glass-cta-btn',
     'font-medium',
-    'border border-[rgba(112,161,215,0.5)]',
-    'shadow-[0_4px_18px_rgba(112,161,215,0.30)]',
-    'hover:shadow-[0_8px_32px_rgba(112,161,215,0.42)]',
+    'border border-[rgba(77,130,188,0.5)]',
+    'shadow-[0_4px_18px_rgba(77,130,188,0.30)]',
+    'hover:shadow-[0_8px_32px_rgba(77,130,188,0.42)]',
     'hover:bg-[#5F90C5]',
     'active:bg-[#5483B8]',
   ].join(' ');
@@ -73,8 +73,8 @@ export function MagneticButton({
   const secondaryStyle = [
     'glass-surface glass-surface-subtle',
     'font-medium',
-    'hover:border-[rgba(112,161,215,0.55)]',
-    'hover:shadow-[0_4px_16px_rgba(112,161,215,0.14)]',
+    'hover:border-[rgba(77,130,188,0.55)]',
+    'hover:shadow-[0_4px_16px_rgba(77,130,188,0.14)]',
   ].join(' ');
 
   const baseClass = `relative inline-flex items-center justify-center gap-2 rounded-full text-xs uppercase tracking-wider transition-[box-shadow,background-color,border-color] select-none cursor-pointer focus-visible:outline-2 focus-visible:outline-[#70A1D7] focus-visible:outline-offset-3 ${

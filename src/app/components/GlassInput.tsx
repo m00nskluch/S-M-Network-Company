@@ -54,8 +54,8 @@ export function GlassInput({
   const glowShadow = error
     ? '0 0 0 3px rgba(239,68,68,0.14)'
     : focused
-    ? '0 0 0 3.5px rgba(112,161,215,0.22), 0 4px 16px rgba(112,161,215,0.14)'
-    : '0 2px 8px rgba(112,161,215,0.08)';
+    ? '0 0 0 3.5px rgba(77,130,188,0.22), 0 4px 16px rgba(77,130,188,0.14)'
+    : '0 2px 8px rgba(77,130,188,0.08)';
 
   return (
     <div className="relative">
@@ -81,7 +81,7 @@ export function GlassInput({
             style={{
               left: 0,
               right: 0,
-              background: `radial-gradient(200px circle at ${glowX}% 50%, rgba(112,161,215,0.60), transparent 70%)`,
+              background: `radial-gradient(200px circle at ${glowX}% 50%, rgba(77,130,188,0.60), transparent 70%)`,
               opacity: focused ? 1 : 0,
               transition: 'opacity 0.2s ease',
             }}

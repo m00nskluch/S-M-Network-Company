@@ -103,7 +103,7 @@ function AnimatedNumber({ value }: { value: number }) {
 /* ─── Santiago Time Capsule ──────────────────────────────────── */
 function TimeCapsule({ time }: { time: string }) {
   return (
-    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[rgba(112,161,215,0.28)] bg-[rgba(255,255,255,0.55)] backdrop-blur-sm shadow-[var(--sm-shadow-xs)]">
+    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[rgba(77,130,188,0.28)] bg-[rgba(255,255,255,0.55)] backdrop-blur-sm shadow-[var(--sm-shadow-xs)]">
       <Clock className="w-3 h-3 shrink-0" style={{ color: 'var(--sm-sky)' }} />
       <span className="font-mono text-[10px] font-bold tabular-nums" style={{ color: 'var(--sm-slate)' }}>
         {time}
@@ -281,8 +281,8 @@ function ProcesosSection() {
                   <div
                     className="w-8 h-8 rounded-xl flex items-center justify-center border"
                     style={{
-                      background: activeStep === i ? 'rgba(112,161,215,0.12)' : 'rgba(112,161,215,0.04)',
-                      borderColor: activeStep === i ? 'rgba(112,161,215,0.35)' : 'rgba(112,161,215,0.12)',
+                      background: activeStep === i ? 'rgba(77,130,188,0.12)' : 'rgba(77,130,188,0.04)',
+                      borderColor: activeStep === i ? 'rgba(77,130,188,0.35)' : 'rgba(77,130,188,0.12)',
                       color: 'var(--sm-sky)',
                       transition: 'all 0.4s ease',
                     }}
@@ -292,7 +292,7 @@ function ProcesosSection() {
                   <span className="font-mono text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--sm-sky)' }}>
                     Paso {step.num}
                   </span>
-                  <div className="h-px flex-1" style={{ background: 'rgba(112,161,215,0.18)' }} />
+                  <div className="h-px flex-1" style={{ background: 'rgba(77,130,188,0.18)' }} />
                 </div>
                 <h4 className="font-display font-bold text-2xl mb-3" style={{ color: 'var(--sm-slate)' }}>
                   {step.label}
@@ -325,8 +325,8 @@ function ProcesosSection() {
                   <g key={step.num}>
                     <motion.circle
                       cx="100" cy={step.cy} r="30"
-                      fill={activeStep >= i ? 'rgba(112,161,215,0.10)' : 'rgba(255,255,255,0.4)'}
-                      stroke={activeStep >= i ? '#70A1D7' : 'rgba(112,161,215,0.18)'}
+                      fill={activeStep >= i ? 'rgba(77,130,188,0.10)' : 'rgba(255,255,255,0.4)'}
+                      stroke={activeStep >= i ? '#70A1D7' : 'rgba(77,130,188,0.18)'}
                       strokeWidth="1.5"
                       animate={{
                         opacity: activeStep >= i ? 1 : 0.3,
@@ -340,7 +340,7 @@ function ProcesosSection() {
                       <motion.circle
                         cx="100" cy={step.cy} r="38"
                         fill="none"
-                        stroke="rgba(112,161,215,0.25)"
+                        stroke="rgba(77,130,188,0.25)"
                         strokeWidth="1"
                         animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
                         transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
@@ -407,7 +407,7 @@ function CursorHalo() {
       className="fixed top-0 left-0 w-6 h-6 rounded-full pointer-events-none z-[9999]"
       style={{
         background: 'rgba(142,197,252,0.55)',
-        boxShadow: '0 0 14px 3px rgba(112,161,215,0.25)',
+        boxShadow: '0 0 14px 3px rgba(77,130,188,0.25)',
         filter: 'blur(1px)',
         mixBlendMode: 'multiply',
         willChange: 'transform',
@@ -621,18 +621,18 @@ export default function Page() {
                 className="border-sky-lavender relative w-full max-w-[280px] rounded-[36px]"
                 style={{
                   background: 'rgba(255,255,255,0.92)',
-                  boxShadow: '0 28px 72px rgba(112,161,215,0.26), 0 10px 24px rgba(30,41,59,0.12)',
+                  boxShadow: '0 28px 72px rgba(77,130,188,0.26), 0 10px 24px rgba(30,41,59,0.12)',
                 }}
                 whileHover={prefersReduced ? {} : { y: -6, scale: 1.02 }}
                 transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="rounded-[35px] overflow-hidden border border-[rgba(112,161,215,0.18)]">
+                <div className="rounded-[35px] overflow-hidden border border-[rgba(77,130,188,0.18)]">
 
                   {/* Dynamic Island / notch capsule */}
-                  <div className="bg-white pt-2.5 pb-2 px-5 flex items-center justify-between border-b border-[rgba(112,161,215,0.08)]">
+                  <div className="bg-white pt-2.5 pb-2 px-5 flex items-center justify-between border-b border-[rgba(77,130,188,0.08)]">
                     <div
                       className="absolute top-2 left-1/2 -translate-x-1/2 h-6 px-4 rounded-full z-20 flex items-center gap-2 shadow-sm"
-                      style={{ background: 'rgba(248,249,250,0.95)', border: '1px solid rgba(112,161,215,0.2)' }}
+                      style={{ background: 'rgba(248,249,250,0.95)', border: '1px solid rgba(77,130,188,0.2)' }}
                     >
                       <span className="font-mono text-[8px] font-bold tabular-nums" style={{ color: 'var(--sm-slate)' }}>
                         {santiagoTime.slice(0, 5)}
@@ -644,7 +644,7 @@ export default function Page() {
                   </div>
 
                   {/* App header */}
-                  <div className="px-4 pt-2 pb-3 border-b border-[rgba(112,161,215,0.08)]" style={{ background: 'white' }}>
+                  <div className="px-4 pt-2 pb-3 border-b border-[rgba(77,130,188,0.08)]" style={{ background: 'white' }}>
                     <div className="flex items-center justify-between mb-1">
                       <StatusBadge color="sage" dot>Demo Interactiva</StatusBadge>
                       <Heart className="w-3 h-3 fill-current animate-pulse" style={{ color: '#F87171' }} />
@@ -663,7 +663,7 @@ export default function Page() {
                       <div
                         key={item.id}
                         className="flex justify-between items-center p-2.5 rounded-xl"
-                        style={{ background: 'white', border: '1px solid rgba(112,161,215,0.12)' }}
+                        style={{ background: 'white', border: '1px solid rgba(77,130,188,0.12)' }}
                       >
                         <div className="flex-1 pr-2">
                           <p className="text-[11px] font-semibold leading-tight" style={{ color: 'var(--sm-slate)' }}>
@@ -675,12 +675,12 @@ export default function Page() {
                         </div>
                         <div
                           className="flex items-center gap-1 rounded-lg p-1 shrink-0"
-                          style={{ background: 'rgba(248,249,250,0.9)', border: '1px solid rgba(112,161,215,0.15)' }}
+                          style={{ background: 'rgba(248,249,250,0.9)', border: '1px solid rgba(77,130,188,0.15)' }}
                         >
                           <button
                             onClick={() => handleDecrement(item.id)}
                             className="w-5 h-5 rounded-md flex items-center justify-center text-[11px] font-bold transition-colors focus-visible:ring-1 focus-visible:ring-[#70A1D7]"
-                            style={{ background: 'rgba(112,161,215,0.1)', color: 'var(--sm-slate)', border: '1px solid rgba(112,161,215,0.2)' }}
+                            style={{ background: 'rgba(77,130,188,0.1)', color: 'var(--sm-slate)', border: '1px solid rgba(77,130,188,0.2)' }}
                             aria-label={`Restar ${item.name}`}
                           >
                             −
@@ -709,7 +709,7 @@ export default function Page() {
                   </div>
 
                   {/* Checkout bar */}
-                  <div className="border-t border-[rgba(112,161,215,0.12)] px-4 py-3 relative" style={{ background: 'white' }}>
+                  <div className="border-t border-[rgba(77,130,188,0.12)] px-4 py-3 relative" style={{ background: 'white' }}>
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="block font-mono text-[8px] font-bold uppercase tracking-wider" style={{ color: 'var(--sm-slate-mid)' }}>
@@ -737,9 +737,9 @@ export default function Page() {
                           exit={{ opacity: 0, y: 12 }}
                           transition={{ duration: 0.24, ease: 'easeOut' as const }}
                           className="absolute inset-0 z-40 p-4 flex flex-col justify-between"
-                          style={{ background: 'rgba(255,255,255,0.97)', borderTop: '1px solid rgba(112,161,215,0.12)', borderRadius: 'inherit' }}
+                          style={{ background: 'rgba(255,255,255,0.97)', borderTop: '1px solid rgba(77,130,188,0.12)', borderRadius: 'inherit' }}
                         >
-                          <div className="flex justify-between items-center pb-2" style={{ borderBottom: '1px solid rgba(112,161,215,0.12)' }}>
+                          <div className="flex justify-between items-center pb-2" style={{ borderBottom: '1px solid rgba(77,130,188,0.12)' }}>
                             <StatusBadge color="sage">Resumen Pedido</StatusBadge>
                             <button
                               onClick={() => setIsCheckoutOpen(false)}
@@ -755,7 +755,7 @@ export default function Page() {
                             <p className="font-mono text-[8px] leading-relaxed p-2.5 rounded-lg" style={{
                               color: 'var(--sm-slate-mid)',
                               background: 'rgba(248,249,250,0.9)',
-                              border: '1px solid rgba(112,161,215,0.14)',
+                              border: '1px solid rgba(77,130,188,0.14)',
                             }}>
                               &ldquo;Hola Dona Flor Gourmet, quisiera pedir:{' '}
                               {menuItems.filter((i) => i.count > 0).map((i) => `${i.count}x ${i.name}`).join(', ') || '1x Empanadas'}.{' '}
@@ -844,7 +844,7 @@ export default function Page() {
               <div className="space-y-5 relative z-10">
                 <motion.div
                   className="w-12 h-12 rounded-2xl flex items-center justify-center border"
-                  style={{ background: 'rgba(112,161,215,0.10)', borderColor: 'rgba(112,161,215,0.28)', color: 'var(--sm-sky)' }}
+                  style={{ background: 'rgba(77,130,188,0.10)', borderColor: 'rgba(77,130,188,0.28)', color: 'var(--sm-sky)' }}
                   animate={prefersReduced ? {} : { scale: [1, 1.1, 1] }}
                   transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
                 >
@@ -859,7 +859,7 @@ export default function Page() {
                   </p>
                 </div>
               </div>
-              <div className="mt-6 pt-4 font-mono text-[9px] font-bold uppercase tracking-wider relative z-10" style={{ borderTop: '1px solid rgba(112,161,215,0.18)', color: 'var(--sm-sky)' }}>
+              <div className="mt-6 pt-4 font-mono text-[9px] font-bold uppercase tracking-wider relative z-10" style={{ borderTop: '1px solid rgba(77,130,188,0.18)', color: 'var(--sm-sky)' }}>
                 Un único pago · Código propio · Conexión directa
               </div>
             </SpotlightCard>
@@ -911,7 +911,7 @@ export default function Page() {
               <div className="space-y-5 relative z-10">
                 <motion.div
                   className="w-14 h-14 rounded-2xl border flex items-center justify-center"
-                  style={{ color: 'var(--sm-sky)', borderColor: 'rgba(112,161,215,0.28)', background: 'rgba(112,161,215,0.08)' }}
+                  style={{ color: 'var(--sm-sky)', borderColor: 'rgba(77,130,188,0.28)', background: 'rgba(77,130,188,0.08)' }}
                   whileHover={prefersReduced ? {} : { scale: 1.12, rotate: 6 }}
                   transition={{ duration: 0.28, ease: [0.34, 1.56, 0.64, 1] as const }}
                 >
@@ -926,7 +926,7 @@ export default function Page() {
                   </p>
                 </div>
               </div>
-              <div className="pt-5 flex items-center justify-between relative z-10" style={{ borderTop: '1px solid rgba(112,161,215,0.14)' }}>
+              <div className="pt-5 flex items-center justify-between relative z-10" style={{ borderTop: '1px solid rgba(77,130,188,0.14)' }}>
                 <span className="font-mono text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--sm-sky)' }}>
                   Velocidad + SEO Local
                 </span>
@@ -945,7 +945,7 @@ export default function Page() {
               <div className="space-y-5 relative z-10">
                 <motion.div
                   className="w-12 h-12 rounded-2xl border flex items-center justify-center"
-                  style={{ color: 'var(--sm-sky)', borderColor: 'rgba(112,161,215,0.28)', background: 'rgba(112,161,215,0.08)' }}
+                  style={{ color: 'var(--sm-sky)', borderColor: 'rgba(77,130,188,0.28)', background: 'rgba(77,130,188,0.08)' }}
                   whileHover={prefersReduced ? {} : { scale: 1.10, rotate: -5 }}
                   transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] as const }}
                 >
@@ -960,7 +960,7 @@ export default function Page() {
                   </p>
                 </div>
               </div>
-              <div className="pt-5 flex items-center justify-between relative z-10" style={{ borderTop: '1px solid rgba(112,161,215,0.14)' }}>
+              <div className="pt-5 flex items-center justify-between relative z-10" style={{ borderTop: '1px solid rgba(77,130,188,0.14)' }}>
                 <span className="font-mono text-[9px] font-bold uppercase tracking-wider" style={{ color: 'var(--sm-sky)' }}>
                   Precios CLP + WhatsApp
                 </span>
@@ -976,7 +976,7 @@ export default function Page() {
               <div className="flex-1 space-y-4 relative z-10">
                 <motion.div
                   className="w-12 h-12 rounded-2xl border flex items-center justify-center"
-                  style={{ color: 'var(--sm-sky)', borderColor: 'rgba(112,161,215,0.28)', background: 'rgba(112,161,215,0.08)' }}
+                  style={{ color: 'var(--sm-sky)', borderColor: 'rgba(77,130,188,0.28)', background: 'rgba(77,130,188,0.08)' }}
                   whileHover={prefersReduced ? {} : { scale: 1.10, rotate: 4 }}
                   transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] as const }}
                 >
@@ -1055,7 +1055,7 @@ export default function Page() {
               role: 'Liderazgo Comercial & Gestión',
               desc: 'Enfocado en relaciones comerciales empáticas, atención personalizada y presupuestos realistas sin sobrecostos para PYMEs.',
               badgeColor: 'sky' as const,
-              iconColor: 'rgba(112,161,215,0.12)',
+              iconColor: 'rgba(77,130,188,0.12)',
             },
             {
               initials: 'JU', name: 'Jeshua Useche',
@@ -1083,7 +1083,7 @@ export default function Page() {
                   </motion.div>
                   {/* Pulsing ring */}
                   <motion.div
-                    className="absolute inset-0 rounded-full border-2 border-[rgba(112,161,215,0.3)]"
+                    className="absolute inset-0 rounded-full border-2 border-[rgba(77,130,188,0.3)]"
                     animate={prefersReduced ? {} : { scale: [1, 1.22, 1], opacity: [0.7, 0, 0.7] }}
                     transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                     aria-hidden="true"
@@ -1104,12 +1104,12 @@ export default function Page() {
                       href="#contacto"
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-medium transition-all duration-200 hover:shadow-sm"
                       style={{
-                        background: 'rgba(112,161,215,0.10)',
-                        border: '1px solid rgba(112,161,215,0.24)',
+                        background: 'rgba(77,130,188,0.10)',
+                        border: '1px solid rgba(77,130,188,0.24)',
                         color: 'var(--sm-sky)',
                       }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(112,161,215,0.18)'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(112,161,215,0.10)'; }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(77,130,188,0.18)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(77,130,188,0.10)'; }}
                     >
                       <MessageCircle className="w-3 h-3" />
                       Contactar
@@ -1150,11 +1150,11 @@ export default function Page() {
 
 
             <div className="relative z-10 flex items-center gap-4 mb-8">
-              <div className="h-px flex-1" style={{ background: 'rgba(112,161,215,0.2)' }} />
+              <div className="h-px flex-1" style={{ background: 'rgba(77,130,188,0.2)' }} />
               <span className="font-mono text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--sm-slate-mid)' }}>
                 O completa el formulario
               </span>
-              <div className="h-px flex-1" style={{ background: 'rgba(112,161,215,0.2)' }} />
+              <div className="h-px flex-1" style={{ background: 'rgba(77,130,188,0.2)' }} />
             </div>
 
             <AnimatePresence mode="wait">
@@ -1173,8 +1173,8 @@ export default function Page() {
                     transition={{ ...spring, delay: 0.1 }}
                     className="w-16 h-16 rounded-full flex items-center justify-center mx-auto border"
                     style={{
-                      background: 'rgba(112,161,215,0.10)',
-                      borderColor: 'rgba(112,161,215,0.28)',
+                      background: 'rgba(77,130,188,0.10)',
+                      borderColor: 'rgba(77,130,188,0.28)',
                       color: 'var(--sm-sky)',
                     }}
                   >
@@ -1240,26 +1240,8 @@ export default function Page() {
       {/* ══════════════════════════════════════════════════════
           FOOTER
           ══════════════════════════════════════════════════════ */}
-      <footer className="mt-4" style={{ borderTop: '1px solid rgba(112,161,215,0.14)' }}>
-        {/* Marquee over sm-bg-alt */}
-        <div className="overflow-hidden py-3" style={{ background: 'var(--sm-bg-alt)', borderBottom: '1px solid rgba(112,161,215,0.10)' }}>
-          <div className="marquee-track">
-            {[...Array(4)].map((_, i) => (
-              <span key={i} className="flex items-center gap-7 pr-7 font-mono text-[9px] font-bold uppercase tracking-widest shrink-0" style={{ color: 'rgba(30,41,59,0.35)' }}>
-                <span>Sin cobros mensuales</span>
-                <span style={{ color: 'var(--sm-sky)' }}>·</span>
-                <span>Código propio</span>
-                <span style={{ color: 'var(--sm-sky)' }}>·</span>
-                <span>Conexión directa</span>
-                <span style={{ color: 'var(--sm-lavender)' }}>·</span>
-                <span>Next.js + WhatsApp</span>
-                <span style={{ color: 'var(--sm-lavender)' }}>·</span>
-                <span>Santiago, Chile 🇨🇱</span>
-                <span style={{ color: 'var(--sm-sage)' }}>·</span>
-              </span>
-            ))}
-          </div>
-        </div>
+      <footer className="mt-4" style={{ borderTop: '1px solid rgba(77,130,188,0.14)' }}>
+
 
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
@@ -1327,7 +1309,7 @@ export default function Page() {
           </div>
 
           {/* Bottom bar */}
-          <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid rgba(112,161,215,0.12)' }}>
+          <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid rgba(77,130,188,0.12)' }}>
             <p className="font-mono text-[9px] uppercase tracking-wider" style={{ color: 'rgba(30,41,59,0.4)' }}>
               © {new Date().getFullYear()} S&M Network Company. Todos los derechos reservados.
             </p>
