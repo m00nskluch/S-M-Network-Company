@@ -9,28 +9,28 @@
 /* ── Design Tokens ──────────────────────────────────────────── */
 :root {
   /* Base surfaces */
-  --bg-main:        #d0fdd7; /* very light green */
-  --bg-alt:         #c4dafa; /* very light blue */
+  --bg-main:        #d0fdd7;
+  --bg-alt:         #c4dafa;
   --bg-elevated:    #ffffff;
 
   /* Brand palette */
-  --accent-cyan:    #4d82bc;   /* medium blue */
-  --accent-cyan-dim:#84b6f4;   /* light blue */
-  --accent-orange:  #9bfab0;   /* light green */
-  --accent-orange-dim: #c4dafa;/* very light blue */
+  --accent-cyan:    #84b6f4;
+  --accent-cyan-dim:#4d82bc;
+  --accent-orange:  #9bfab0;
+  --accent-orange-dim: #c4dafa;
 
   /* Text */
-  --text-primary:   #1E293B; /* dark slate for readability */
-  --text-secondary: #475569;
-  --text-muted:     #64748b;
+  --text-primary:   #4d82bc;
+  --text-secondary: #84b6f4;
+  --text-muted:     #84b6f4;
 
   /* --sm- variables for page.tsx components */
   --sm-bg:       #d0fdd7;
   --sm-bg-alt:   #c4dafa;
-  --sm-sky:        #4d82bc;
-  --sm-sky-light:  #84b6f4;
-  --sm-slate:      #1E293B;
-  --sm-slate-mid:  #475569;
+  --sm-sky:        #84b6f4;
+  --sm-sky-light:  #c4dafa;
+  --sm-slate:      #4d82bc;
+  --sm-slate-mid:  #4d82bc;
   --sm-sage:       #9bfab0;
 
   /* Glass recipe — dark mode */
@@ -80,10 +80,10 @@
   --color-bg-main:        #d0fdd7;
   --color-bg-alt:         #c4dafa;
   --color-bg-elevated:    #ffffff;
-  --color-accent-cyan:    #4d82bc;
+  --color-accent-cyan:    #84b6f4;
   --color-accent-orange:  #9bfab0;
-  --color-text-primary:   #1E293B;
-  --color-text-secondary: #475569;
+  --color-text-primary:   #4d82bc;
+  --color-text-secondary: #84b6f4;
   --font-sans:    var(--font-plus-jakarta);
   --font-mono:    var(--font-geist-mono);
   --font-display: var(--font-space-grotesk);
